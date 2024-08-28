@@ -1,0 +1,30 @@
+public class sym {
+    public static final int EOF = 0; // End of File token
+    public static final int INT = 1;
+    public static final int RETURN = 2;
+    public static final int IF = 3;
+    public static final int ELSE = 4;
+    public static final int PLUS = 5;
+    public static final int MINUS = 6;
+    public static final int MULT = 7;
+    public static final int DIV = 8;
+    public static final int EQUAL = 9;
+    public static final int ID = 10;
+    public static final int NUM = 11;
+    public static final int GREATEREQUAL = 12;
+    public static final int OR = 13;
+    public static final int SEMICOLON = 14;
+    public static final int LESS = 15;
+    public static final int ASSIGN = 16;
+    public static final int GREATER = 17;
+    public static final int LBRACKET = 18;
+    public static final int RBRACKET = 19;
+    public static final int LBRACE = 20;
+    public static final int RBRACE = 21;
+    public static final int NOTEQUAL = 22;
+    public static final int AND = 23;
+    public static final int LESSEQUAL = 24;
+    public static final int NOT = 25;
+    public static final int LPAREN = 26;
+    public static final int RPAREN = 27;
+}

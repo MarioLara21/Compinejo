@@ -1,89 +1,58 @@
-%{
-    /* JFlex example: partial Java language lexer specification */
-        import java_cup.runtime.*;
+import java.io.*;
+import java_cup.runtime.Symbol;
+%%
 
-        /**
-         * This class is a simple example lexer.
-         */
-        %%
+%class CScanner
+%unicode
+%cup
+%public
+%type Symbol
+%line
+%column
 
-        %class Lexer
-        %unicode
-        %cup
-        %line
-        %column
+%%
 
-        %{
-          StringBuffer string = new StringBuffer();
+/*Keywords*/
+"int" { return new Symbol(sym.INT); }
+"return" { return new Symbol(sym.RETURN); }
+"if" { return new Symbol(sym.IF); }
+"else" { return new Symbol(sym.ELSE); }
 
-          private Symbol symbol(int type) {
-            return new Symbol(type, yyline, yycolumn);
-          }
-          private Symbol symbol(int type, Object value) {
-            return new Symbol(type, yyline, yycolumn, value);
-          }
-        %}
+/*Operators*/
+"+" { return new Symbol(sym.PLUS); }
+"-" { return new Symbol(sym.MINUS); }
+"*" { return new Symbol(sym.MULT); }
+"/" { return new Symbol(sym.DIV); }
+"=" { return new Symbol(sym.ASSIGN); }
+"==" { return new Symbol(sym.EQUAL); }
+"!=" { return new Symbol(sym.NOTEQUAL); }
+"<" { return new Symbol(sym.LESS); }
+"<=" { return new Symbol(sym.LESSEQUAL); }
+">" { return new Symbol(sym.GREATER); }
+">=" { return new Symbol(sym.GREATEREQUAL); }
+"&&" { return new Symbol(sym.AND); }
+"||" { return new Symbol(sym.OR); }
+"!" { return new Symbol(sym.NOT); }
+"(" { return new Symbol(sym.LPAREN); }
+")" { return new Symbol(sym.RPAREN); }
+"{" { return new Symbol(sym.LBRACE); }
+"}" { return new Symbol(sym.RBRACE); }
+";" { return new Symbol(sym.SEMICOLON); }
+"[" { return new Symbol(sym.LBRACKET); }
+"]" { return new Symbol(sym.RBRACKET); }
 
-        LineTerminator = \r|\n|\r\n
-        InputCharacter = [^\r\n]
-        WhiteSpace     = {LineTerminator} | [ \t\f]
+/*Identifiers*/
+[a-zA-Z][a-zA-Z0-9]* { return new Symbol(sym.ID, yytext()); }
 
-        /* comments */
-        Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
+/*Numbers*/
+[0-9]+ { return new Symbol(sym.NUM, Integer.parseInt(yytext())); }
 
-        TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
-        // Comment can be the last line of the file, without line terminator.
-        EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
-        DocumentationComment = "/**" {CommentContent} "*"+ "/"
-        CommentContent       = ( [^*] | \*+ [^/*] )*
+/* Comments */
+"//"[^\n]*      { /* Ignore single-line comments */ }
+"/*"[^*]*"*"[^/]("*"|"[^/"])*"/"  { /* Ignore multi-line comments */ }
 
-        Identifier = [:jletter:] [:jletterdigit:]*
+/* Whitespace */
+[ \t\n\r] { /* ignore whitespace */ }
 
-        DecIntegerLiteral = 0 | [1-9][0-9]*
-
-        %state STRING
-
-        %%
-
-        /* keywords */
-        <YYINITIAL> "abstract"           { return symbol(sym.ABSTRACT); }
-        <YYINITIAL> "boolean"            { return symbol(sym.BOOLEAN); }
-        <YYINITIAL> "break"              { return symbol(sym.BREAK); }
-
-        <YYINITIAL> {
-          /* identifiers */
-          {Identifier}                   { return symbol(sym.IDENTIFIER); }
-
-          /* literals */
-          {DecIntegerLiteral}            { return symbol(sym.INTEGER_LITERAL); }
-          \"                             { string.setLength(0); yybegin(STRING); }
-
-          /* operators */
-          "="                            { return symbol(sym.EQ); }
-          "=="                           { return symbol(sym.EQEQ); }
-          "+"                            { return symbol(sym.PLUS); }
-
-          /* comments */
-          {Comment}                      { /* ignore */ }
-
-          /* whitespace */
-          {WhiteSpace}                   { /* ignore */ }
-        }
-
-        <STRING> {
-          \"                             { yybegin(YYINITIAL);
-                                           return symbol(sym.STRING_LITERAL,
-                                           string.toString()); }
-          [^\n\r\"\\]+                   { string.append( yytext() ); }
-          \\t                            { string.append('\t'); }
-          \\n                            { string.append('\n'); }
-
-          \\r                            { string.append('\r'); }
-          \\\"                           { string.append('\"'); }
-          \\                             { string.append('\\'); }
-        }
-
-        /* error fallback */
-        [^]                              { throw new Error("Illegal character <"+
-                                                            yytext()+">"); }
-}
+/* Error handling */
+.               { System.err.println("Unexpected character: " + yytext()); }
