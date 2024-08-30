@@ -1,4 +1,4 @@
-public class sym {
+public class Sym {
     public static final int EOF = 0; // End of File token
     public static final int INT = 1;
     public static final int RETURN = 2;
