@@ -11,7 +11,7 @@ public class Main {
             CScanner scanner = new CScanner(reader);
 
             Symbol token;
-            while((token = scanner.next_token()).sym != Sym.EOF) {
+            while((token = scanner.next_token()).sym != sym.EOF) {
                 System.out.println(token);
             }
         }
