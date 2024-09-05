@@ -1,2 +1,5 @@
 # Compinejo
-Repo de compi con Cornejo
+Compiler for c using jflex and cup
+## Commands
+
+Compile jflex scanner using maven: `mvn jflex:generate`
