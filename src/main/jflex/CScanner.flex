@@ -13,7 +13,38 @@ import java_cup.runtime.Symbol;
 %%
 
 /*Keywords*/
-//MARIO TRABAJO
+"auto" { return new Symbol(sym.AUTO); }
+"break" { return new Symbol(sym.BREAK); }
+"case" { return new Symbol(sym.CASE); }
+"char" { return new Symbol(sym.CHAR); }
+"const" { return new Symbol(sym.CONST); }
+"continue" { return new Symbol(sym.CONTINUE); }
+"default" { return new Symbol(sym.DEFAULT); }
+"do" { return new Symbol(sym.DO); }
+"double" { return new Symbol(sym.DOUBLE); }
+"else" { return new Symbol(sym.ELSE); }
+"enum" { return new Symbol(sym.ENUM); }
+"extern" { return new Symbol(sym.EXTERN); }
+"float" { return new Symbol(sym.FLOAT); }
+"for" { return new Symbol(sym.FOR); }
+"goto" { return new Symbol(sym.GOTO); }
+"if" { return new Symbol(sym.IF); }
+"int" { return new Symbol(sym.INT); }
+"long" { return new Symbol(sym.LONG); }
+"register" { return new Symbol(sym.REGISTER); }
+"return" { return new Symbol(sym.RETURN); }
+"short" { return new Symbol(sym.SHORT); }
+"signed" { return new Symbol(sym.SIGNED); }
+"sizeof" { return new Symbol(sym.SIZEOF); }
+"static" { return new Symbol(sym.STATIC); }
+"struct" { return new Symbol(sym.STRUCT); }
+"switch" { return new Symbol(sym.SWITCH); }
+"typedef" { return new Symbol(sym.TYPEDEF); }
+"union" { return new Symbol(sym.UNION); }
+"unsigned" { return new Symbol(sym.UNSIGNED); }
+"void" { return new Symbol(sym.VOID); }
+"volatile" { return new Symbol(sym.VOLATILE); }
+"while" { return new Symbol(sym.WHILE); }
 
 /*Operators*/
 ","         { return new Symbol(sym.COMMA); }
