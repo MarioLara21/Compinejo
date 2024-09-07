@@ -14,10 +14,11 @@ import scanner.symbols.sym;
 %column
 
 %{
-
   public int getLine() { return yyline+1; }
-
 %}
+L=[a-zA-Z_]+
+D=[0-9]+
+espacio=[ ,\t,\r]+
 
 %%
 
@@ -130,3 +131,11 @@ import scanner.symbols.sym;
     // Identifier errors
 ([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%\&\*\+\-\=]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
 [0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
+//(({L}+)? (("�" | "!" | "#" | "$" | "%" | "&" | "*" | "+" | "-" | "@" | "`" | "~")+) ({L}+)?) {System.err.println("Invalid identifier: " + yytext());} //Caracteres especiales
+(("\"")({L}+)(" " |{L})*) {System.err.println("Invalid identifier: " + yytext());} //strings que no cierran al inicio
+(({L}+)((" " |{L}+)*) ("\"")) {System.err.println("Invalid identifier: " + yytext());} // strings que no cierran al final
+(({D}+)("\.")) {System.err.println("Invalid identifier: " + yytext());} //Números que no tienen nada luego del punto decimal
+(("\.")([eE][-+]?[0-9]+)) {System.err.println("Invalid identifier: " + yytext());} //Numeros cientificos que no tienen nada antes del punto decimal
+(("\.")(D)) {System.err.println("Invalid identifier: " + yytext());} //decimales sin numero antes del punto
+(([1-9][0-9]*|0)("\.")([eE][-+]?)) {System.err.println("Invalid identifier: " + yytext());} //Parte científica incompleta
+(([1-9][0-9]*|0)("\.")(D)([eE][-+]?)) {System.err.println("Invalid identifier: " + yytext());} //Parte científica mal estructurada

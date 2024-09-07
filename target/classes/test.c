@@ -2,7 +2,6 @@
 
 int main()
 {
-
     int a = 10;
     int 1b = 20; // Error: invalid suffix "b" on integer constant
     char c = 'A';
@@ -16,5 +15,6 @@ int main()
 // double 3b = 30; // Error: invalid suffix "b" on integer constant
 
     printf("Hello, World!");
+    printf("Hello, World!\n");
     return 0;
 }
