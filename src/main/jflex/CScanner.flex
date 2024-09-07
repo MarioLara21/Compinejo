@@ -18,6 +18,11 @@ import scanner.symbols.sym;
 %}
 L=[a-zA-Z_]+
 D=[0-9]+
+O=0[0-7]+
+H=0[xX][0-9a-fA-F]+
+F=[0-9]+\.[0-9]*([eE][-+]?[0-9]+)?
+E= [0-9]+([eE][-+]?[0-9]+)
+S=[-+]?[0-9]+
 espacio=[ ,\t,\r]+
 
 %%
@@ -109,6 +114,11 @@ espacio=[ ,\t,\r]+
 
 /*Numbers*/
 [0-9]+ { return new Symbol(sym.NUM, Integer.parseInt(yytext())); }
+[0][0-7]+
+[0][xX][0-9a-fA-F]+
+[0-9]+\.[0-9]*([eE][-+]?[0-9]+)?
+[0-9]+([eE][-+]?[0-9]+)
+[-+]?[0-9]+
 
 /*Strings & Characters*/
 
