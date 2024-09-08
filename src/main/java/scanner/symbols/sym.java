@@ -1,3 +1,5 @@
+package scanner.symbols;
+
 public class sym {
     public static final int EOF = 0;            // <EOF>
     public static final int COMMA = 1;           // ","
@@ -79,5 +81,7 @@ public class sym {
     public static final int VOID = 77;      // "void"
     public static final int VOLATILE = 78;  // "volatile"
     public static final int WHILE = 79;     // "while"
+    public static final int HASH = 80;      // "#"
+    public static final int STRING = 81;    // "string"
 
 }

@@ -1,5 +1,8 @@
 
 import java_cup.runtime.Symbol;
+import scanner.errors.err;
+import scanner.errors.errors;
+import scanner.symbols.sym;
 %%
 
 %class CScanner
@@ -9,6 +12,12 @@ import java_cup.runtime.Symbol;
 %type Symbol
 %line
 %column
+
+%{
+
+  public int getLine() { return yyline+1; }
+
+%}
 
 %%
 
@@ -92,6 +101,7 @@ import java_cup.runtime.Symbol;
 "<<="       { return new Symbol(sym.LSHIFTEQUAL); }
 ">>="       { return new Symbol(sym.RSHIFTEQUAL); }
 "->"        { return new Symbol(sym.ARROW); }
+"#"         { return new Symbol(sym.HASH); }
 
 /*Identifiers*/
 [a-zA-Z][a-zA-Z0-9]* { return new Symbol(sym.ID, yytext()); }
@@ -99,14 +109,23 @@ import java_cup.runtime.Symbol;
 /*Numbers*/
 [0-9]+ { return new Symbol(sym.NUM, Integer.parseInt(yytext())); }
 
+/*Strings & Characters*/
+
+\"([^\"\\n]*)\"               { return new Symbol(sym.STRING, yytext()); }  // String entre comillas dobles sin saltos de línea
+\'([^\']{1})\'                { return new Symbol(sym.STRING, yytext()); }  // Carácter entre comillas dobles
+"#"[0-9]+                     { return new Symbol(sym.STRING, yytext()); }  // Carácter representado como # seguido de un número entero
+
+
 /* Comments */
 "//"[^\n]*      { /* Ignore single-line comments */ }
-"/*"[^*]*"*"[^/]("*"|"[^/"])*"/"  { /* Ignore multi-line comments */ }
+"/*"([^*]|[\r\n]|"*"[^/])*"*/" { /* Handle comment here */ }
+
 
 /* Whitespace */
 [ \t\n\r] { /* ignore whitespace */ }
 
+
 /* Error handling */
-.               { System.err.println("Unexpected character: " + yytext()); }
+.               {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));}
     // Identifier error
-[0-9]+[a-zA-Z]+ { System.err.println("Invalid identifier: " + yytext()); }
+[0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
