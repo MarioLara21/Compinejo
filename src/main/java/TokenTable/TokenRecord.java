@@ -51,15 +51,16 @@ public class TokenRecord {
         return lineOccurrenceString.toString();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder errorRecordString = new StringBuilder();
-        errorRecordString.append("Error ID: ").append(errorId).append("\t");
-        errorRecordString.append("Token: ").append(token).append("\t");
-        errorRecordString.append("Token Type: ").append(tokenType).append("\t");
-        for(int line : lineOccurrence.keySet()){
-            errorRecordString.append(line).append(" (").append(lineOccurrence.get(line)).append("), ");
-        }
-        return errorRecordString.toString();
+
+    public void printRercord(String format) {
+        System.out.format(format, errorId, token, tokenType, getLineOccurrenceString());
+//        StringBuilder errorRecordString = new StringBuilder();
+//        errorRecordString.append("Error ID: ").append(errorId).append("\t");
+//        errorRecordString.append("Token: ").append(token).append("\t");
+//        errorRecordString.append("Token Type: ").append(tokenType).append("\t");
+//        for(int line : lineOccurrence.keySet()){
+//            errorRecordString.append(line).append(" (").append(lineOccurrence.get(line)).append("), ");
+//        }
+
     }
 }
