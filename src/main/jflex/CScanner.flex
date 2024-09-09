@@ -112,13 +112,14 @@ espacio=[ ,\t,\r]+
 /*Identifiers*/
 [a-zA-Z][a-zA-Z0-9]* { return new Symbol(sym.ID, yytext()); }
 
-/*Numbers*/
-[0-9]+ { return new Symbol(sym.NUM, Integer.parseInt(yytext())); }
-[0][0-7]+
-[0][xX][0-9a-fA-F]+
-[0-9]+\.[0-9]*([eE][-+]?[0-9]+)?
-[0-9]+([eE][-+]?[0-9]+)
-[-+]?[0-9]+
+/* Números */
+[0-9]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext())); } // Decimal entero
+[0][0-7]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext(), 8)); } // Octal
+[0][xX][0-9a-fA-F]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext().substring(2), 16)); } // Hexadecimal
+[0-9]+\.[0-9]*([eE][-+]?[0-9]+)? {return new Symbol(sym.NUM, Double.parseDouble(yytext())); } // Decimal con parte fraccionaria o exponencial
+[0-9]+([eE][-+]?[0-9]+) {return new Symbol(sym.NUM, Double.parseDouble(yytext())); } // Decimal con notación científica
+[-+]?[0-9]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext())); } // Entero con signo opcional
+
 
 /*Strings & Characters*/
 
@@ -135,17 +136,15 @@ espacio=[ ,\t,\r]+
 /* Whitespace */
 [ \t\n\r] { /* ignore whitespace */ }
 
-
 /* Error handling */
 .               {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));}
-    // Identifier errors
 ([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%\&\*\+\-\=]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
 [0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
-//(({L}+)? (("�" | "!" | "#" | "$" | "%" | "&" | "*" | "+" | "-" | "@" | "`" | "~")+) ({L}+)?) {System.err.println("Invalid identifier: " + yytext());} //Caracteres especiales
-(("\"")({L}+)(" " |{L})*) {System.err.println("Invalid identifier: " + yytext());} //strings que no cierran al inicio
-(({L}+)((" " |{L}+)*) ("\"")) {System.err.println("Invalid identifier: " + yytext());} // strings que no cierran al final
-(({D}+)("\.")) {System.err.println("Invalid identifier: " + yytext());} //Números que no tienen nada luego del punto decimal
-(("\.")([eE][-+]?[0-9]+)) {System.err.println("Invalid identifier: " + yytext());} //Numeros cientificos que no tienen nada antes del punto decimal
-(("\.")(D)) {System.err.println("Invalid identifier: " + yytext());} //decimales sin numero antes del punto
-(([1-9][0-9]*|0)("\.")([eE][-+]?)) {System.err.println("Invalid identifier: " + yytext());} //Parte científica incompleta
-(([1-9][0-9]*|0)("\.")(D)([eE][-+]?)) {System.err.println("Invalid identifier: " + yytext());} //Parte científica mal estructurada
+\.[0-9]+ {return new Symbol(err.errorMap.get(errors.InvalidNumber));} // Número decimal sin dígito antes del punto
+[0-9]+\.[^0-9] {return new Symbol(err.errorMap.get(errors.InvalidNumber));} // Número decimal sin dígito después del punto
+
+(("\"")({L}+)(" " |{L})*) {return new Symbol(err.errorMap.get(errors.InvalidString));} //strings que no cierran al inicio
+(({L}+)((" " |{L}+)*) ("\"")) {return new Symbol(err.errorMap.get(errors.InvalidString));} // strings que no cierran al final
+(("\.")([eE][-+]?[0-9]+)) {return new Symbol(err.errorMap.get(errors.InvalidNumber));} //Numeros cientificos que no tienen nada antes del punto decimal
+(([1-9][0-9]*|0)("\.")([eE][-+]?)) {return new Symbol(err.errorMap.get(errors.InvalidNumber));} //Parte científica incompleta
+(([1-9][0-9]*|0)("\.")(D)([eE][-+]?)) {return new Symbol(err.errorMap.get(errors.InvalidNumber));} //Parte científica mal estructurada
