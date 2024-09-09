@@ -14,10 +14,16 @@ import scanner.symbols.sym;
 %column
 
 %{
-
   public int getLine() { return yyline+1; }
-
 %}
+L=[a-zA-Z_]+
+D=[0-9]+
+O=0[0-7]+
+H=0[xX][0-9a-fA-F]+
+F=[0-9]+\.[0-9]*([eE][-+]?[0-9]+)?
+E= [0-9]+([eE][-+]?[0-9]+)
+S=[-+]?[0-9]+
+espacio=[ ,\t,\r]+
 
 %%
 
@@ -106,8 +112,14 @@ import scanner.symbols.sym;
 /*Identifiers*/
 [a-zA-Z][a-zA-Z0-9]* { return new Symbol(sym.ID, yytext()); }
 
-/*Numbers*/
-[0-9]+ { return new Symbol(sym.NUM, Integer.parseInt(yytext())); }
+/* Números */
+[0-9]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext())); } // Decimal entero
+[0][0-7]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext(), 8)); } // Octal
+[0][xX][0-9a-fA-F]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext().substring(2), 16)); } // Hexadecimal
+[0-9]*\.[0-9]+([eE][+-]?[0-9]+)? {return new Symbol(sym.NUM, Double.parseDouble(yytext())); } // Decimal con parte fraccionaria o exponencial
+[0-9]+([eE][+-]?[0-9]+)? {return new Symbol(sym.NUM, Double.parseDouble(yytext())); } // Decimal con notación científica
+[-+]?[0-9]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext())); } // Entero con signo opcional
+
 
 /*Strings & Characters*/
 
@@ -124,9 +136,12 @@ import scanner.symbols.sym;
 /* Whitespace */
 [ \t\n\r] { /* ignore whitespace */ }
 
-
 /* Error handling */
 .               {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));}
-    // Identifier errors
 ([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%\&\*\+\-\=]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
 [0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
+\.[0-9]+ {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} // Número decimal sin dígito antes del punto
+[0-9]+\.[^0-9] {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} // Número decimal sin dígito después del punto
+(("\.")([eE][-+]?[0-9]+)) {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} //Numeros cientificos que no tienen nada antes del punto decimal
+[0-9]*\.[0-9]+[eE][+-]?[0-9]* {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} //Parte científica incompleta
+\.[0-9]+[eE][+-]?[0-9]+ {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} //Parte científica mal estructurada
