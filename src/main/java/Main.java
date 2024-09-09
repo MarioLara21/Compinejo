@@ -6,6 +6,8 @@ import scanner.tokens.TokenType;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args)  {
@@ -21,6 +23,8 @@ public class Main {
             }
             FileReader reader = new FileReader(path);
             CScanner scanner = new CScanner(reader);
+
+            ArrayList<Symbol> validTokens = new ArrayList<>();
 
             Symbol token;
             int line;
@@ -38,7 +42,9 @@ public class Main {
                     };
 
                     errors.addErrorRecord(token.sym, scanner.yytext(), type.name(), line);
+                    continue;
                 }
+                validTokens.add(token);
             }
 
             errors.printErrorTable();
