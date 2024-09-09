@@ -1,15 +1,15 @@
-package ErrorTable;
+package TokenTable;
 
 import java.util.HashMap;
 
-public class ErrorRecord {
+public class TokenRecord {
     private final int errorId;
     private final String token;
     private final String tokenType;
     private final HashMap<Integer, Integer> lineOccurrence;
 
 
-    public ErrorRecord(int errorId, String token, String tokenType, int line) {
+    public TokenRecord(int errorId, String token, String tokenType, int line) {
         this.errorId = errorId;
         this.token = token;
         this.tokenType = tokenType;
