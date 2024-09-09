@@ -11,15 +11,22 @@ public class Main {
     public static void main(String[] args)  {
 
         ErrorTable errors = new ErrorTable();
-
+        String path;
         try{
-            FileReader reader = new FileReader("src/main/resources/test.c");
+            path = args[0];
+            System.out.println(path.endsWith(".c"));
+            if(!(path.endsWith(".c") || path.endsWith(".txt"))) {
+                System.out.println("Please provide a .c or .txt file path");
+                return;
+            }
+            FileReader reader = new FileReader(path);
             CScanner scanner = new CScanner(reader);
 
             Symbol token;
             int line;
             while((token = scanner.next_token()).sym != sym.EOF) {
                 line = scanner.getLine();
+                String text = scanner.yytext();
                 if(token.sym < 0) {
 
                     TokenType type = switch (token.sym) {
@@ -35,6 +42,9 @@ public class Main {
             }
 
             errors.printErrorTable();
+        }
+        catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("Please provide a file path");
         }
         catch (FileNotFoundException e) {
             System.out.println("File not found");

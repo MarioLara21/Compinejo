@@ -7,7 +7,7 @@ int main()
     int 1b = 20; // Error: invalid suffix "b" on integer constant
     char c = 'A';
     char[] d = "Hello"; // Error: expected identifier or '(' before '[' token
-
+    double ñenguele = 10.5;
 /*
 * multi-line comment
 * multi-line comment
