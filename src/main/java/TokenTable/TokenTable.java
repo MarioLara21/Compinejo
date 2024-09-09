@@ -29,8 +29,14 @@ public class TokenTable {
     }
 
     public void printTable() {
+        String format = "| %-20s | %-16s | %-12s | %-64s |%n";
+        System.out.format("+----------------------+------------------+--------------+------------------------------------------------------------------+%n");
+        System.out.format("| Token ID             | Token            | Token Type   | Lines                                                            |%n");
+        System.out.format("+----------------------+------------------+--------------+------------------------------------------------------------------+%n");
         for (TokenRecord record : this.tokenRecords) {
-            System.out.println(record.toString());
+
+            record.printRercord(format);
         }
+        System.out.format("+----------------------+------------------+--------------+------------------------------------------------------------------+%n");
     }
 }
