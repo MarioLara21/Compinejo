@@ -2,6 +2,7 @@
 
 int main()
 {
+    char z = "b";
 
     int a = 10;
     int 1b = 20; // Error: invalid suffix "b" on integer constant
