@@ -23,6 +23,7 @@ int main()
 * int 2b = 20
 */
 // double 3b = 30; // Error: invalid suffix "b" on integer constant
+
     printf("Hello, World!");
     return 0;
 }
