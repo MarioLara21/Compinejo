@@ -123,10 +123,10 @@ espacio=[ ,\t,\r]+
 
 /*Strings & Characters*/
 
-\"[^\"\\]*(\\.[^\"\\]*)*\"    {
+\"[^\"\\]*(\\.[^\"\\]*)*\"              {
           String str = yytext();
           if(str.contains("\n")){
-              return new Symbol(err.errorMap.get(errors.InvalidIdentifier));
+              return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));
           }
           return new Symbol(sym.STRING, yytext()); }  // String entre comillas dobles sin saltos de línea
 \'([^\']{1})\'                { return new Symbol(sym.STRING, yytext()); }  // Carácter entre comillas dobles
