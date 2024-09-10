@@ -128,9 +128,9 @@ espacio=[ ,\t,\r]+
           if(str.contains("\n")){
               return new Symbol(err.errorMap.get(errors.InvalidIdentifier));
           }
-          return new Symbol(sym.STRING, yytext()); }  // String entre comillas dobles sin saltos de línea
+          return new Symbol(sym.STRING, yytext()); }
 \'([^\']{1})\'                { return new Symbol(sym.STRING, yytext()); }  // Carácter entre comillas dobles
-"#"[0-9]+                     { return new Symbol(sym.STRING, yytext()); }  // Carácter representado como # seguido de un número entero
+#[0-9]+                     { return new Symbol(sym.STRING, yytext()); }  // Carácter representado como # seguido de un número entero
 
 
 /* Comments */
@@ -141,10 +141,15 @@ espacio=[ ,\t,\r]+
 /* Whitespace */
 [ \t\n\r] { /* ignore whitespace */ }
 
+
 /* Error handling */
 .               {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));}
+    // Identifier errors
 ([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%\&\*\+\-\=]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
 [0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
+
+    // String errors
+
 \.[0-9]+ {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} // Número decimal sin dígito antes del punto
 [0-9]+\.[^0-9] {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} // Número decimal sin dígito después del punto
 (("\.")([eE][-+]?[0-9]+)) {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} //Numeros cientificos que no tienen nada antes del punto decimal

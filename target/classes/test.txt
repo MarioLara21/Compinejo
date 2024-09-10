@@ -1,24 +1,39 @@
-#include <stdio.h>
+ x: int;  // no hay error
+ 
+ 
+_ss REAL;  // no hay error, no debe hacer diferencia la mayuscula
+"string1";
 
-int main()
-{
+int a = "str ing2"
+12zz:STRING;  // Aqui si hay un error porque no puede empezar con numeros  
 
-    int a = 10;
-    int 1b = 20; // Error: invalid suffix "b" on integer constant
-    char c = 'A';
-    char[] d = "Hello"; // Error: expected identifier or '(' before '[' token
-    double ñenguele = 10.5;
-    float  g = 3.43;
-    float zangano = .54;
-    double pipo = 3. ;
-/*
-* multi-line comment
-* multi-line comment
-* int 2b = 20
-*/
-// double 3b = 30; // Error: invalid suffix "b" on integer constant
+$aa;   //en este caso se espera que $ de un error lexico
 
-    printf("Hello, World!");
-    printf("Hello, World!\n");
-    return 0;
-}
+"Esto es un string" //String cerrado
+
+"ljhgsdkjaghsdf" ;  //String sin cerrar
+
+#123 #765  //estos son literales de caracteres 
+
+
+
+"Error de String
+porque es de lineas"
+
+123
+324
++304  //separar el operdor del numero
+
+123.345
+
+123.  // error porque no tiene nada despues del punto
+
+3.0E5 
+123.5E  //error no tiene nada despues del exponente
+
+(* Estos son algunos 
+operadores validos *)
+
++ 	- 	*    / 
+( 	) 	[ 	] 	
+:= 	.   :   += 	-= 	*=	/=	
