@@ -141,8 +141,10 @@ espacio=[ ,\t,\r]+
 /* Whitespace */
 [ \t\n\r] { /* ignore whitespace */ }
 
+
 /* Error handling */
 .               {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));}
+    // Identifier errors
 ([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%\&\*\+\-\=]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
 [0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
 
