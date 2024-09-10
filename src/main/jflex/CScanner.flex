@@ -110,13 +110,13 @@ espacio=[ ,\t,\r]+
 "#"         { return new Symbol(sym.HASH); }
 
 /*Identifiers*/
-[a-zA-Z][a-zA-Z0-9]* { return new Symbol(sym.ID, yytext()); }
+[\\*]*[a-zA-Z][a-zA-Z0-9]* { return new Symbol(sym.ID, yytext()); }
 
 /* Números */
 [0-9]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext())); } // Decimal entero
 [0][0-7]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext(), 8)); } // Octal
 [0][xX][0-9a-fA-F]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext().substring(2), 16)); } // Hexadecimal
-[0-9]*\.[0-9]+([eE][+-]?[0-9]+)? {return new Symbol(sym.NUM, Double.parseDouble(yytext())); } // Decimal con parte fraccionaria o exponencial
+[0-9]+\.[0-9]+([eE][+-]?[0-9]+)? {return new Symbol(sym.NUM, Double.parseDouble(yytext())); } // Decimal con parte fraccionaria o exponencial
 [0-9]+([eE][+-]?[0-9]+)? {return new Symbol(sym.NUM, Double.parseDouble(yytext())); } // Decimal con notación científica
 [-+]?[0-9]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext())); } // Entero con signo opcional
 
@@ -126,7 +126,7 @@ espacio=[ ,\t,\r]+
 \"[^\"\\]*(\\.[^\"\\]*)*\"    {
           String str = yytext();
           if(str.contains("\n")){
-              return new Symbol(err.errorMap.get(errors.InvalidIdentifier));
+              return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));
           }
           return new Symbol(sym.STRING, yytext()); }
 \'([^\']{1})\'                { return new Symbol(sym.STRING, yytext()); }  // Carácter entre comillas dobles

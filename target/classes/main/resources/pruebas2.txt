@@ -1,3 +1,4 @@
+  a = .78 // error en la construccion del numero
 /// Prueba de Errores y comentarios
 /// Debe reconocer errores de simbolos no reconocidos
 /// Comillas sin cerrar, etc.
@@ -9,12 +10,11 @@ varias lineas"  // deberia dar error
 int main()
 {
 
-  char *x = "ljhgsdkjaghsdf ;   //String sin cerrar
+  char *x = "ljhgsdkjaghsdf" ;   //String sin cerrar
   char y = '\b ';  //char mal construido
 
   int 3var //error de identificador
 
-  a = .78 // error en la construccion del numero
 
   /*
  Prueba de comentarios de Bloque
