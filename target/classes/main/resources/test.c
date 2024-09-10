@@ -1,21 +1,11 @@
-#include <"stdio.h">
+// Literales numéricos correctos
+123                  // Correcto: Número entero decimal
+0x1F4                // Correcto: Número hexadecimal
+0123                 // Correcto: Número octal
+1.23e4               // Correcto: Número en notación científica
 
-int main()
-{
-    char z = "b";
-
-    int a = 10;
-    int 1b = 20; // Error: invalid suffix "b" on integer constant
-    char c = 'A';
-    char[] d = "Hello"; // Error: expected identifier or '(' before '[' token
-    double ñenguele = 10.5;
-/*
-* multi-line comment
-* multi-line comment
-* int 2b = 20
-*/
-// double 3b = 30; // Error: invalid suffix "b" on integer constant
-
-    printf("Hello, World!");
-    return 0;
-}
+// Literales numéricos incorrectos
+089                  // Incorrecto: Octal inválido (8 no permitido)
+1.23e                // Incorrecto: Notación científica incompleta
+1.e4                 // Incorrecto: Falta parte fraccionaria
+.23e4                // Incorrecto: Falta parte entera
