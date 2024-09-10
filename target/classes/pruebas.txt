@@ -1,0 +1,37 @@
+ x: int;  // no hay error
+
+
+_ss REAL;  // no hay error, no debe hacer diferencia la mayuscula
+
+12zz:STRING;  // Aqui si hay un error porque no puede empezar con numeros
+
+$aa   //en este caso se espera que $ de un error lexico
+
+"Este es un String"
+
+"ljhgsdkjaghsdf ;  //String sin cerrar
+
+#123 #765  //estos son literales de caracteres
+
+
+
+"Error de String
+porque es de lineas"
+
+123
+324
++304  //separar el operdor del numero
+
+123.345
+
+123.  // error porque no tiene nada despues del punto
+
+3.0E5
+123.5E  //error no tiene nada despues del exponente
+
+(* Estos son algunos
+operadores validos *)
+
++ 	- 	*    /
+( 	) 	[ 	]
+:= 	.   :   += 	-= 	*=	/=
