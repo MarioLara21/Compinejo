@@ -2,7 +2,7 @@
 import java_cup.runtime.Symbol;
 import scanner.errors.err;
 import scanner.errors.errors;
-import scanner.symbols.sym;
+import scanner.symbols.sym;import java.util.regex.Pattern;
 %%
 
 %class CScanner
@@ -111,9 +111,14 @@ import scanner.symbols.sym;
 
 /*Strings & Characters*/
 
-\"([^\"\\n]*)\"               { return new Symbol(sym.STRING, yytext()); }  // String entre comillas dobles sin saltos de línea
+\"[^\"\\]*(\\.[^\"\\]*)*\"    {
+          String str = yytext();
+          if(str.contains("\n")){
+              return new Symbol(err.errorMap.get(errors.InvalidIdentifier));
+          }
+          return new Symbol(sym.STRING, yytext()); }
 \'([^\']{1})\'                { return new Symbol(sym.STRING, yytext()); }  // Carácter entre comillas dobles
-"#"[0-9]+                     { return new Symbol(sym.STRING, yytext()); }  // Carácter representado como # seguido de un número entero
+#[0-9]+                     { return new Symbol(sym.STRING, yytext()); }  // Carácter representado como # seguido de un número entero
 
 
 /* Comments */
@@ -130,3 +135,5 @@ import scanner.symbols.sym;
     // Identifier errors
 ([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%\&\*\+\-\=]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
 [0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
+
+    // String errors

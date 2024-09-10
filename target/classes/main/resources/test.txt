@@ -2,14 +2,16 @@
  
  
 _ss REAL;  // no hay error, no debe hacer diferencia la mayuscula
+"string1";
 
+int a = "str ing2"
 12zz:STRING;  // Aqui si hay un error porque no puede empezar con numeros  
 
-$aa   //en este caso se espera que $ de un error lexico
+$aa;   //en este caso se espera que $ de un error lexico
 
-"Este es un String"
+"Esto es un string" //String cerrado
 
-"ljhgsdkjaghsdf ;  //String sin cerrar
+"ljhgsdkjaghsdf" ;  //String sin cerrar
 
 #123 #765  //estos son literales de caracteres 
 
