@@ -16,15 +16,6 @@ import scanner.symbols.sym;
 %{
   public int getLine() { return yyline+1; }
 %}
-L=[a-zA-Z_]+
-D=[0-9]+
-O=0[0-7]+
-H=0[xX][0-9a-fA-F]+
-F=[0-9]+\.[0-9]*([eE][-+]?[0-9]+)?
-E= [0-9]+([eE][-+]?[0-9]+)
-S=[-+]?[0-9]+
-espacio=[ ,\t,\r]+
-
 %%
 
 /*Keywords*/
@@ -110,7 +101,7 @@ espacio=[ ,\t,\r]+
 "#"         { return new Symbol(sym.HASH); }
 
 /*Identifiers*/
-[\\*]*[a-zA-Z][a-zA-Z0-9]* { return new Symbol(sym.ID, yytext()); }
+[a-zA-Z][a-zA-Z0-9]* { return new Symbol(sym.ID, yytext()); }
 
 /* Números */
 [0-9]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext())); } // Decimal entero
@@ -145,7 +136,7 @@ espacio=[ ,\t,\r]+
 /* Error handling */
 .               {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));}
     // Identifier errors
-([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%\&\*\+\-\=]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
+([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%\&]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
 [0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
 
     // String errors

@@ -51,7 +51,7 @@ public class Main {
                     else if(tokenValue == 47){
                         type = TokenType.IDENTIFIER;
                     }
-                    else if(tokenValue < 80 ){
+                    else if(tokenValue <= 80 ){
                         type = TokenType.KEYWORD;
                     }
                     else{
