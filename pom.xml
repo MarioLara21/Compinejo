@@ -38,6 +38,32 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-parser</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>java_cup.Main</mainClass>
+                            <arguments>
+                                <argument>-parser</argument>
+                                <argument>target/generated-sources/jcup/Parser</argument>
+                                <argument>-symbols</argument>
+                                <argument>target/generated-sources/jcup/sym</argument>
+                                <argument>src/main/jcup/grammar.cup</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
         <!-- ... -->
     </build>

@@ -1,0 +1,84 @@
+// Definición de terminales (tokens)
+terminal int INT, CHAR, LONG, SHORT, VOID, ID, NUM;
+terminal int IF, ELSE, FOR, WHILE, RETURN, SWITCH, CASE, BREAK, CONTINUE;
+terminal int EQ, PLUS, MINUS, MULT, DIV, ASSIGN;
+terminal int LPAREN, RPAREN, LBRACE, RBRACE, SEMICOLON, COMMA;
+terminal int CONST, COLON;
+
+// No terminales
+non terminal Program, DeclarationsAndFunctions, GlobalDecls, FunctionList, Function, ParamList, StmtList, Stmt, Expr, ParamListRest, VarList, CaseList, Declaration;
+
+// Tipo de retorno de las producciones
+non terminal Type, VarDecl, ConstDecl;
+
+precedence left EQ;
+precedence left PLUS, MINUS;
+precedence left MULT, DIV;
+precedence left ELSE;
+
+// Estructura del programa completo
+Program ::= DeclarationsAndFunctions;
+
+//// Conjunto de declaraciones y funciones
+//DeclarationsAndFunctions ::= GlobalDecls FunctionList;
+//
+//// Declaraciones globales
+//GlobalDecls ::= Declaration GlobalDecls
+//              | /* vacío */;
+//
+//Declaration ::= VarDecl
+//              | ConstDecl;
+
+// Definición de funciones
+FunctionList ::= Function FunctionList
+               | Function;
+
+Function ::= Type ID LPAREN ParamList RPAREN LBRACE StmtList RBRACE;
+
+Type ::= INT
+       | CHAR
+       | LONG
+       | SHORT
+       | VOID;
+
+ParamList ::= /* vacío */
+            | Type ID ParamListRest;
+
+ParamListRest ::= /* vacío */
+                | COMMA Type ID ParamListRest;
+
+// Declaraciones de variables y constantes
+VarDecl ::= Type VarList SEMICOLON;
+ConstDecl ::= CONST Type VarList SEMICOLON;
+VarList ::= ID
+          | ID COMMA VarList;
+
+// Lista de sentencias
+StmtList ::= /* vacío */
+           | Stmt StmtList;
+
+Stmt ::= IF LPAREN Expr RPAREN Stmt
+       | IF LPAREN Expr RPAREN Stmt ELSE Stmt
+       | WHILE LPAREN Expr RPAREN Stmt
+       | FOR LPAREN Expr SEMICOLON Expr SEMICOLON Expr RPAREN Stmt
+       | RETURN Expr SEMICOLON
+       | BREAK SEMICOLON
+       | CONTINUE SEMICOLON
+       | VarDecl
+       | Expr SEMICOLON
+       | SWITCH LPAREN Expr RPAREN LBRACE CaseList RBRACE;
+
+// Lista de casos para switch
+CaseList ::= CASE NUM COLON StmtList CaseList
+           | /* vacío */;
+
+// Expresiones y operadores
+Expr ::= Expr PLUS Expr
+       | Expr MINUS Expr
+       | Expr MULT Expr
+       | Expr DIV Expr
+       | Expr EQ Expr
+       | ID ASSIGN Expr
+       | ID
+       | NUM
+       | LPAREN Expr RPAREN;
