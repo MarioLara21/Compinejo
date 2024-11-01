@@ -21,7 +21,10 @@ public class Main {
                 return;
             }
             FileReader reader = new FileReader(path);
+            FileReader parseReader = new FileReader(path);
             CScanner scanner = new CScanner(reader);
+
+            CParser parser = new CParser(new CScanner(parseReader));
 
 
             Symbol token;
@@ -64,8 +67,10 @@ public class Main {
             System.out.println("Valid Tokens: ======================================");
             validTokens.printTable();
 
-            System.out.println("Errors: ======================================");
-            errors.printTable();
+            Object result = parser.parse().value;
+
+//            System.out.println("Errors: ======================================");
+//            errors.printTable();
         }
         catch (ArrayIndexOutOfBoundsException e){
             System.out.println("Please provide a file path");
@@ -74,6 +79,8 @@ public class Main {
             System.out.println("File not found");
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+           e.printStackTrace();
         }
 
     }

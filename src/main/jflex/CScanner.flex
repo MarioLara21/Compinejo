@@ -2,7 +2,7 @@
 import java_cup.runtime.Symbol;
 import scanner.errors.err;
 import scanner.errors.errors;
-import scanner.symbols.sym;
+
 %%
 
 %class CScanner

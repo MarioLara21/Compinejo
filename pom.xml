@@ -52,11 +52,17 @@
                         </goals>
                         <configuration>
                             <mainClass>java_cup.Main</mainClass>
+
                             <arguments>
+                                <!-- Define the parser name without a path -->
                                 <argument>-parser</argument>
-                                <argument>target/generated-sources/jcup/Parser</argument>
+                                <argument>CParser</argument>
+
+                                <!-- Define the symbols file name -->
                                 <argument>-symbols</argument>
-                                <argument>target/generated-sources/jcup/sym</argument>
+                                <argument>sym</argument>
+
+                                <!-- Path to the .cup grammar file -->
                                 <argument>src/main/jcup/grammar.cup</argument>
                             </arguments>
                         </configuration>
@@ -65,7 +71,6 @@
             </plugin>
 
         </plugins>
-        <!-- ... -->
     </build>
 
 </project>

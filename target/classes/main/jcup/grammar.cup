@@ -21,4 +21,4 @@ varAsignation::= ASSIGN asignationChain;
 asignationChain::=  valueType COMMA asignationChain | valueType;
 
 funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE RBRACE SEMICOLON | VOID ID LPAREN paramChain RPAREN LBRACE RBRACE SEMICOLON ;
-//paramChain::= type idChain COMMA paramChain| type idChain | ; //TODO: fix (int a, int b, ...)
+paramChain::= type idChain | ;

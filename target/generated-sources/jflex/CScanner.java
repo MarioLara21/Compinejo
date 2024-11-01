@@ -6,7 +6,7 @@
 import java_cup.runtime.Symbol;
 import scanner.errors.err;
 import scanner.errors.errors;
-import scanner.symbols.sym;
+
 
 @SuppressWarnings("fallthrough")
 public class CScanner implements java_cup.runtime.Scanner {

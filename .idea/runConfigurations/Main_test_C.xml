@@ -2,7 +2,7 @@
   <configuration default="false" name="Main test C" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="Main" />
     <module name="Compinejo" />
-    <option name="PROGRAM_PARAMETERS" value="src/main/resources/test.c" />
+    <option name="PROGRAM_PARAMETERS" value="src/main/resources/test2.c" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
