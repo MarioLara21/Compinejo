@@ -109,7 +109,7 @@ import scanner.errors.errors;
 [0][xX][0-9a-fA-F]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext().substring(2), 16)); } // Hexadecimal
 [0-9]+\.[0-9]+([eE][+-]?[0-9]+)? {return new Symbol(sym.NUM, Double.parseDouble(yytext())); } // Decimal con parte fraccionaria o exponencial
 [0-9]+([eE][+-]?[0-9]+)? {return new Symbol(sym.NUM, Double.parseDouble(yytext())); } // Decimal con notación científica
-[-+]?[0-9]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext())); } // Entero con signo opcional
+//[-+]?[0-9]+ {return new Symbol(sym.NUM, Integer.parseInt(yytext())); } // Entero con signo opcional
 
 
 /*Strings & Characters*/
@@ -136,7 +136,7 @@ import scanner.errors.errors;
 /* Error handling */
 .               {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));}
     // Identifier errors
-([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%\&]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
+([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
 [0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
 
     // String errors

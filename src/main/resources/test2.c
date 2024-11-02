@@ -1,3 +1,7 @@
 int a;
 
-int func1(char a, int b){};
+int func1(){
+int a;
+a+b;
+(5==5) && (6==6);
+};

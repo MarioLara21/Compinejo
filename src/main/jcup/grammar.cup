@@ -1,24 +1,74 @@
-nonterminal varDeclaration, type, idChain, funcDeclaration, globalProg, varAsignation, valueType, asignationChain, paramChain;
+nonterminal varDeclaration, type, idChain, funcDeclaration, globalProg, varAsignation, asignationChain, paramChain, funcImpl, funcHead, funcBody;
+nonterminal arithmeticExpression, statement, booleanExpression, expression;
 
 terminal COMMA, SEMICOLON, INCREMENT, DECREMENT, EQUALS, GREATEREQUAL, GREATER, QUESTION, LESSEQUAL, LESS, NOTEQUAL, OROR, ANDAND, NOT, ASSIGN, PLUS, MINUS, TIMES, DIVIDE, MODULO, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE, COLON, DOT, PLUSEQUAL, MINUSEQUAL, TIMESEQUAL, DIVIDEEQUAL, AND, XOR, OR, RSHIFT, LSHIFT, TILDE, MODULOEQUAL, ANDEQUAL, XOREQUAL, OREQUAL, LSHIFTEQUAL, RSHIFTEQUAL, ARROW, HASH, ID, NUM, AUTO, BREAK, CASE, CHAR, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, ENUM, EXTERN, FLOAT, FOR, GOTO, IF, INT, LONG, REGISTER, RETURN, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, UNSIGNED, VOID, VOLATILE, WHILE, STRING;
 
+
+precedence left OROR;
+precedence left ANDAND;
+precedence left EQUALS, NOTEQUAL;
+precedence left GREATEREQUAL, GREATER, LESSEQUAL, LESS;
+precedence left ASSIGN;
+precedence left PLUSEQUAL, MINUSEQUAL, TIMESEQUAL, DIVIDEEQUAL;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVIDE, MODULO;
+precedence right INCREMENT, DECREMENT;
+precedence right NOT;  // Highest precedence for NOT
 
 globalProg ::= varDeclaration globalProg| funcDeclaration globalProg | funcDeclaration;
 
 
 varDeclaration ::= CONST type idChain SEMICOLON
                     | type idChain SEMICOLON
-                    | CONST type idChain varAsignation SEMICOLON
-                    | type idChain varAsignation SEMICOLON;
+                    | CONST type varAsignation SEMICOLON
+                    | type varAsignation SEMICOLON;
 
-idChain::= ID COMMA idChain | ID;
+idChain::= idChain COMMA ID | ID;
 type ::= INT | CHAR | LONG | SHORT;
-valueType ::= NUM | STRING;
 
 // int a,b = 1,2
 // TODO: throw error when id's do not match values ej: a,b = 1;
-varAsignation::= ASSIGN asignationChain;
-asignationChain::=  valueType COMMA asignationChain | valueType;
+varAsignation::= idChain ASSIGN asignationChain;
+asignationChain::=  NUM COMMA asignationChain | NUM;
 
-funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE RBRACE SEMICOLON | VOID ID LPAREN paramChain RPAREN LBRACE RBRACE SEMICOLON ;
-//paramChain::= type idChain COMMA paramChain| type idChain | ; //TODO: fix (int a, int b, ...)
+funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON | VOID ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON ;
+paramChain::= type ID COMMA paramChain | type ID | ;
+
+funcImpl ::= varDeclaration funcImpl | statement funcImpl | statement;  // `statement` instead of `funcBody`
+
+// Statements can be expressions with semicolons
+statement ::= expression SEMICOLON | funcBody;
+
+// Top-level expression that can be boolean or arithmetic
+expression ::= booleanExpression | arithmeticExpression;
+
+// Arithmetic expressions
+arithmeticExpression ::= arithmeticExpression PLUS arithmeticExpression
+                       | arithmeticExpression MINUS arithmeticExpression
+                       | arithmeticExpression TIMES arithmeticExpression
+                       | arithmeticExpression DIVIDE arithmeticExpression
+                       | arithmeticExpression MODULO arithmeticExpression
+                       | arithmeticExpression ASSIGN arithmeticExpression
+                       | arithmeticExpression PLUSEQUAL arithmeticExpression
+                       | arithmeticExpression MINUSEQUAL arithmeticExpression
+                       | arithmeticExpression TIMESEQUAL arithmeticExpression
+                       | arithmeticExpression DIVIDEEQUAL arithmeticExpression
+                       | ID INCREMENT
+                       | ID DECREMENT
+                       | INCREMENT ID
+                       | DECREMENT ID
+                       | NUM
+                       | ID
+                       | LPAREN arithmeticExpression RPAREN;
+
+// Boolean expressions
+booleanExpression ::= arithmeticExpression EQUALS arithmeticExpression
+                    | arithmeticExpression NOTEQUAL arithmeticExpression
+                    | arithmeticExpression GREATEREQUAL arithmeticExpression
+                    | arithmeticExpression GREATER arithmeticExpression
+                    | arithmeticExpression LESSEQUAL arithmeticExpression
+                    | arithmeticExpression LESS arithmeticExpression
+                    | booleanExpression OROR booleanExpression
+                    | booleanExpression ANDAND booleanExpression
+                    | NOT booleanExpression
+                    | LPAREN booleanExpression RPAREN;
