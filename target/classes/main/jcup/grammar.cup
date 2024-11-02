@@ -3,7 +3,6 @@ nonterminal arithmeticExpression, statement, booleanExpression, expression;
 
 terminal COMMA, SEMICOLON, INCREMENT, DECREMENT, EQUALS, GREATEREQUAL, GREATER, QUESTION, LESSEQUAL, LESS, NOTEQUAL, OROR, ANDAND, NOT, ASSIGN, PLUS, MINUS, TIMES, DIVIDE, MODULO, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE, COLON, DOT, PLUSEQUAL, MINUSEQUAL, TIMESEQUAL, DIVIDEEQUAL, AND, XOR, OR, RSHIFT, LSHIFT, TILDE, MODULOEQUAL, ANDEQUAL, XOREQUAL, OREQUAL, LSHIFTEQUAL, RSHIFTEQUAL, ARROW, HASH, ID, NUM, AUTO, BREAK, CASE, CHAR, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, ENUM, EXTERN, FLOAT, FOR, GOTO, IF, INT, LONG, REGISTER, RETURN, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, UNSIGNED, VOID, VOLATILE, WHILE, STRING;
 
-
 precedence left OROR;
 precedence left ANDAND;
 precedence left EQUALS, NOTEQUAL;
@@ -37,7 +36,8 @@ paramChain::= type ID COMMA paramChain | type ID | ;
 funcImpl ::= varDeclaration funcImpl | statement funcImpl | statement;  // `statement` instead of `funcBody`
 
 // Statements can be expressions with semicolons
-statement ::= expression SEMICOLON | funcBody;
+statement ::= expression SEMICOLON | funcBody | if_statement | for_statement | while_statement | switch_statement | READ LPAREN RPAREN SEMICOLON | WRITE LPAREN expression RPAREN SEMICOLON | BREAK SEMICOLON | CONTINUE SEMICOLON;
+statement_block ::= LBRACE funcImpl RBRACE;
 
 // Top-level expression that can be boolean or arithmetic
 expression ::= booleanExpression | arithmeticExpression;
@@ -72,3 +72,16 @@ booleanExpression ::= arithmeticExpression EQUALS arithmeticExpression
                     | booleanExpression ANDAND booleanExpression
                     | NOT booleanExpression
                     | LPAREN booleanExpression RPAREN;
+
+// If - If_else Statements
+if_statement ::= IF "(" expression ")" statement_block SEMICOLON
+                | IF "(" expression ")" statement_block ElSE statement_block SEMICOLON
+
+// For Statements
+for_statement ::= FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN statement_block SEMICOLON
+
+// While Statements
+while_statement ::= WHILE LPAREN expression RPAREN statement_block SEMICOLON
+
+// Switch Statements
+switch_statement ::= SWITCH LPAREN NUM RPAREN LBRACE case_blocks RBRACE SEMICOLON

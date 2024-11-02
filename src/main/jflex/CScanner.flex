@@ -37,6 +37,7 @@ import scanner.errors.errors;
 "if" { return new Symbol(sym.IF); }
 "int" { return new Symbol(sym.INT); }
 "long" { return new Symbol(sym.LONG); }
+"read" { return new Symbol(sym.READ); }
 "register" { return new Symbol(sym.REGISTER); }
 "return" { return new Symbol(sym.RETURN); }
 "short" { return new Symbol(sym.SHORT); }
@@ -51,6 +52,7 @@ import scanner.errors.errors;
 "void" { return new Symbol(sym.VOID); }
 "volatile" { return new Symbol(sym.VOLATILE); }
 "while" { return new Symbol(sym.WHILE); }
+"write" { return new Symbol(sym.WRITE); }
 
 /*Operators*/
 ","         { return new Symbol(sym.COMMA); }
