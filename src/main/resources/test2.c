@@ -1,6 +1,6 @@
-int a;
+char a = 1;
 
-int func1(){
-int a;
-
+void func1(int a){
+//char b = 2;
+(5+1)==(4+7);
 };

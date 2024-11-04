@@ -1,11 +1,11 @@
 import TokenTable.TokenTable;
 import java_cup.runtime.Symbol;
-import scanner.symbols.sym;
 import scanner.tokens.TokenType;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
 
 public class Main {
     public static void main(String[] args)  {
@@ -44,7 +44,6 @@ public class Main {
                     };
 
                     errors.addTokenRecord(token.sym, scanner.yytext(), type.name(), line);
-                    continue;
                 }
                 else{
                     int tokenValue = token.sym;

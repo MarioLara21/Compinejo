@@ -1,7 +1,13 @@
-nonterminal varDeclaration, type, idChain, funcDeclaration, globalProg, varAsignation, asignationChain, paramChain, funcImpl, funcHead, funcBody;
+nonterminal varDeclaration, type, idChain, funcDeclaration, globalProg, varAsignation, asignationChain, paramChain;
+nonterminal funcImpl, funcHead, funcBody;
 nonterminal arithmeticExpression, statement, booleanExpression, expression;
 
-terminal COMMA, SEMICOLON, INCREMENT, DECREMENT, EQUALS, GREATEREQUAL, GREATER, QUESTION, LESSEQUAL, LESS, NOTEQUAL, OROR, ANDAND, NOT, ASSIGN, PLUS, MINUS, TIMES, DIVIDE, MODULO, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE, COLON, DOT, PLUSEQUAL, MINUSEQUAL, TIMESEQUAL, DIVIDEEQUAL, AND, XOR, OR, RSHIFT, LSHIFT, TILDE, MODULOEQUAL, ANDEQUAL, XOREQUAL, OREQUAL, LSHIFTEQUAL, RSHIFTEQUAL, ARROW, HASH, ID, NUM, AUTO, BREAK, CASE, CHAR, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, ENUM, EXTERN, FLOAT, FOR, GOTO, IF, INT, LONG, REGISTER, RETURN, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, UNSIGNED, VOID, VOLATILE, WHILE, STRING;
+terminal COMMA, SEMICOLON, INCREMENT, DECREMENT, EQUALS, GREATEREQUAL, GREATER, QUESTION, LESSEQUAL, LESS, NOTEQUAL;
+terminal OROR, ANDAND, NOT, ASSIGN, PLUS, MINUS, TIMES, DIVIDE, MODULO, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE;
+terminal RBRACE, COLON, DOT, PLUSEQUAL, MINUSEQUAL, TIMESEQUAL, DIVIDEEQUAL, AND, XOR, OR, RSHIFT, LSHIFT, TILDE;
+terminal MODULOEQUAL, ANDEQUAL, XOREQUAL, OREQUAL, LSHIFTEQUAL, RSHIFTEQUAL, ARROW, HASH, ID, NUM, AUTO, BREAK, CASE;
+terminal CHAR, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, ENUM, EXTERN, FLOAT, FOR, GOTO, IF, INT, LONG, REGISTER;
+terminal RETURN, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, UNSIGNED, VOID, VOLATILE, WHILE, STRING;
 
 
 precedence left OROR;
@@ -23,24 +29,27 @@ varDeclaration ::= CONST type idChain SEMICOLON
                     | CONST type varAsignation SEMICOLON
                     | type varAsignation SEMICOLON;
 
-idChain::= idChain COMMA ID | ID;
-type ::= INT | CHAR | LONG | SHORT;
+idChain::= idChain COMMA ID | ID | error {:System.out.println("Variable declaration error");:};
+type ::= INT | CHAR | LONG | SHORT | error {:System.out.println("Invalid type");:};
 
 // int a,b = 1,2
 // TODO: throw error when id's do not match values ej: a,b = 1;
 varAsignation::= idChain ASSIGN asignationChain;
-asignationChain::=  NUM COMMA asignationChain | NUM;
+asignationChain::=  NUM COMMA asignationChain | NUM | error {:System.out.println("Variable assignation error");:};
 
-funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON | VOID ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON ;
+funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON
+                  | VOID ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON;
 paramChain::= type ID COMMA paramChain | type ID | ;
 
-funcImpl ::= varDeclaration funcImpl | statement funcImpl | statement;  // `statement` instead of `funcBody`
+funcImpl ::= varDeclaration funcImpl | statement funcImpl | statement | error {:System.out.println("Function implementation error");:};
 
 // Statements can be expressions with semicolons
 statement ::= expression SEMICOLON | funcBody;
 
 // Top-level expression that can be boolean or arithmetic
-expression ::= booleanExpression | arithmeticExpression;
+expression ::= booleanExpression
+             | arithmeticExpression
+             | error {:System.out.println("Invalid expression");:};
 
 // Arithmetic expressions
 arithmeticExpression ::= arithmeticExpression PLUS arithmeticExpression
