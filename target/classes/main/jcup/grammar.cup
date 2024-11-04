@@ -1,3 +1,25 @@
+import java_cup.runtime.Symbol;
+import java_cup.lexer;
+import TokenTable.TokenInfo;
+
+parser code {:
+    public void report_error(String message, Object info) {
+        if (info instanceof Symbol) {
+            Symbol sym = (Symbol) info;
+            TokenInfo tokenInf = (TokenInfo) sym.value;
+            System.err.printf("Syntax Error: %s at line %d, column %d%n",
+                    message, tokenInf.line, tokenInf.column);
+        } else {
+            System.err.println("Syntax Error: " + message);
+        }
+    }
+
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        throw new RuntimeException("Fatal error: Unable to continue parsing.");
+    }
+:};
+
 nonterminal varDeclaration, type, idChain, funcDeclaration, globalProg, varAsignation, asignationChain, paramChain;
 nonterminal funcImpl, funcHead, funcBody;
 nonterminal arithmeticExpression, statement, booleanExpression, expression;
@@ -29,8 +51,12 @@ varDeclaration ::= CONST type idChain SEMICOLON
                     | CONST type varAsignation SEMICOLON
                     | type varAsignation SEMICOLON;
 
-idChain::= idChain COMMA ID | ID | error {:System.out.println("Variable declaration error");:};
-type ::= INT | CHAR | LONG | SHORT | error {:System.out.println("Invalid type");:};
+idChain::= idChain COMMA ID | ID | error {::};
+type ::= INT
+        | CHAR
+        | LONG
+        | SHORT
+        | error {: System.out.println("Invalid type");:};
 
 // int a,b = 1,2
 // TODO: throw error when id's do not match values ej: a,b = 1;

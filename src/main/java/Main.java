@@ -63,8 +63,8 @@ public class Main {
                     validTokens.addTokenRecord(tokenValue, text, type.name(), line);
                 }
             }
-            System.out.println("Valid Tokens: ======================================");
-            validTokens.printTable();
+//            System.out.println("Valid Tokens: ======================================");
+            errors.printTable();
 
             Object result = parser.parse().value;
 
