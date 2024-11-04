@@ -1,7 +1,35 @@
-nonterminal varDeclaration, type, idChain, funcDeclaration, globalProg, varAsignation, asignationChain, paramChain, funcImpl, funcHead, funcBody;
+import java_cup.runtime.Symbol;
+import java_cup.lexer;
+import TokenTable.TokenInfo;
+
+parser code {:
+    public void report_error(String message, Object info) {
+        if (info instanceof Symbol) {
+            Symbol sym = (Symbol) info;
+            TokenInfo tokenInf = (TokenInfo) sym.value;
+            System.err.printf("Syntax Error: %s at line %d, column %d%n",
+                    message, tokenInf.line, tokenInf.column);
+        } else {
+            System.err.println("Syntax Error: " + message);
+        }
+    }
+
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        throw new RuntimeException("Fatal error: Unable to continue parsing.");
+    }
+:};
+
+nonterminal varDeclaration, type, idChain, funcDeclaration, globalProg, varAsignation, asignationChain, paramChain;
+nonterminal funcImpl, funcHead, funcBody;
 nonterminal arithmeticExpression, statement, booleanExpression, expression;
 
-terminal COMMA, SEMICOLON, INCREMENT, DECREMENT, EQUALS, GREATEREQUAL, GREATER, QUESTION, LESSEQUAL, LESS, NOTEQUAL, OROR, ANDAND, NOT, ASSIGN, PLUS, MINUS, TIMES, DIVIDE, MODULO, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE, COLON, DOT, PLUSEQUAL, MINUSEQUAL, TIMESEQUAL, DIVIDEEQUAL, AND, XOR, OR, RSHIFT, LSHIFT, TILDE, MODULOEQUAL, ANDEQUAL, XOREQUAL, OREQUAL, LSHIFTEQUAL, RSHIFTEQUAL, ARROW, HASH, ID, NUM, AUTO, BREAK, CASE, CHAR, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, ENUM, EXTERN, FLOAT, FOR, GOTO, IF, INT, LONG, REGISTER, RETURN, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, UNSIGNED, VOID, VOLATILE, WHILE, STRING;
+terminal COMMA, SEMICOLON, INCREMENT, DECREMENT, EQUALS, GREATEREQUAL, GREATER, QUESTION, LESSEQUAL, LESS, NOTEQUAL;
+terminal OROR, ANDAND, NOT, ASSIGN, PLUS, MINUS, TIMES, DIVIDE, MODULO, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE;
+terminal RBRACE, COLON, DOT, PLUSEQUAL, MINUSEQUAL, TIMESEQUAL, DIVIDEEQUAL, AND, XOR, OR, RSHIFT, LSHIFT, TILDE;
+terminal MODULOEQUAL, ANDEQUAL, XOREQUAL, OREQUAL, LSHIFTEQUAL, RSHIFTEQUAL, ARROW, HASH, ID, NUM, AUTO, BREAK, CASE;
+terminal CHAR, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, ENUM, EXTERN, FLOAT, FOR, GOTO, IF, INT, LONG, REGISTER;
+terminal RETURN, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, UNSIGNED, VOID, VOLATILE, WHILE, STRING;
 
 precedence left OROR;
 precedence left ANDAND;
@@ -22,25 +50,32 @@ varDeclaration ::= CONST type idChain SEMICOLON
                     | CONST type varAsignation SEMICOLON
                     | type varAsignation SEMICOLON;
 
-idChain::= idChain COMMA ID | ID;
-type ::= INT | CHAR | LONG | SHORT;
+idChain::= idChain COMMA ID | ID | error {::};
+type ::= INT
+        | CHAR
+        | LONG
+        | SHORT
+        | error {: System.out.println("Invalid type");:};
 
 // int a,b = 1,2
 // TODO: throw error when id's do not match values ej: a,b = 1;
 varAsignation::= idChain ASSIGN asignationChain;
-asignationChain::=  NUM COMMA asignationChain | NUM;
+asignationChain::=  NUM COMMA asignationChain | NUM | error {:System.out.println("Variable assignation error");:};
 
-funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON | VOID ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON ;
+funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON
+                  | VOID ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON;
 paramChain::= type ID COMMA paramChain | type ID | ;
 
-funcImpl ::= varDeclaration funcImpl | statement funcImpl | statement;  // `statement` instead of `funcBody`
+funcImpl ::= varDeclaration funcImpl | statement funcImpl | statement | error {:System.out.println("Function implementation error");:};
 
 // Statements can be expressions with semicolons
 statement ::= expression SEMICOLON | funcBody | if_statement | for_statement | while_statement | switch_statement | READ LPAREN RPAREN SEMICOLON | WRITE LPAREN expression RPAREN SEMICOLON | BREAK SEMICOLON | CONTINUE SEMICOLON;
 statement_block ::= LBRACE funcImpl RBRACE;
 
 // Top-level expression that can be boolean or arithmetic
-expression ::= booleanExpression | arithmeticExpression;
+expression ::= booleanExpression
+             | arithmeticExpression
+             | error {:System.out.println("Invalid expression");:};
 
 // Arithmetic expressions
 arithmeticExpression ::= arithmeticExpression PLUS arithmeticExpression
@@ -73,6 +108,7 @@ booleanExpression ::= arithmeticExpression EQUALS arithmeticExpression
                     | NOT booleanExpression
                     | LPAREN booleanExpression RPAREN;
 
+
 // If - If_else Statements
 if_statement ::= IF "(" expression ")" statement_block SEMICOLON
                 | IF "(" expression ")" statement_block ElSE statement_block SEMICOLON
@@ -85,3 +121,4 @@ while_statement ::= WHILE LPAREN expression RPAREN statement_block SEMICOLON
 
 // Switch Statements
 switch_statement ::= SWITCH LPAREN NUM RPAREN LBRACE case_blocks RBRACE SEMICOLON
+
