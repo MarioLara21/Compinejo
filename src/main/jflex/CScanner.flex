@@ -19,6 +19,7 @@ import TokenTable.TokenInfo;
 %}
 %%
 
+
 "auto"       { return new Symbol(sym.AUTO, new TokenInfo(yytext(), getLine(), getCol())); }
 "break"      { return new Symbol(sym.BREAK, new TokenInfo(yytext(), getLine(), getCol())); }
 "case"       { return new Symbol(sym.CASE, new TokenInfo(yytext(), getLine(), getCol())); }
