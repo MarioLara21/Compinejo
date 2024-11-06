@@ -31,7 +31,8 @@ nonterminal varDeclaration, type, idChain, funcDeclaration, globalProg, varAsign
 nonterminal funcImpl, funcHead, funcBody;
 nonterminal arithmeticExpression, statement, booleanExpression, expression;
 nonterminal if_statement, for_statement, while_statement, switch_statement;
-nonterminal statement_block,case_blocks;
+nonterminal statement_block,case_blocks,read_statement,write_statement;
+nonterminal function_call,params,validVarDeclaration,varDeclarationError;
 
 terminal COMMA, SEMICOLON, INCREMENT, DECREMENT, EQUALS, GREATEREQUAL, GREATER, QUESTION, LESSEQUAL, LESS, NOTEQUAL;
 terminal OROR, ANDAND, NOT, ASSIGN, PLUS, MINUS, TIMES, DIVIDE, MODULO, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE;
@@ -54,10 +55,18 @@ precedence right NOT;  // Highest precedence for NOT
 globalProg ::= varDeclaration globalProg| funcDeclaration globalProg | funcDeclaration;
 
 
-varDeclaration ::= CONST type idChain SEMICOLON
-                    | type idChain SEMICOLON
-                    | CONST type varAsignation SEMICOLON
-                    | type varAsignation SEMICOLON;
+varDeclaration ::= validVarDeclaration
+                 | varDeclarationError;
+
+validVarDeclaration ::= CONST type idChain SEMICOLON
+                      | type idChain SEMICOLON
+                      | CONST type varAsignation SEMICOLON
+                      | type varAsignation SEMICOLON;
+
+varDeclarationError ::= CONST type idChain {: parser.report_error("Error: Falta ; al final de la declaracion.", parser.scan()); :}
+                      | type idChain {: parser.report_error("Error: Falta ';' al final de la declaracion.", parser.scan()); :}
+                      | CONST type varAsignation {: parser.report_error("Error: Falta ';' al final de la declaracion.", parser.scan()); :}
+                      | type varAsignation {: parser.report_error("Error: Falta ';' al final de la declaracion.", parser.scan()); :};
 
 idChain::= idChain COMMA ID | ID | error {::};
 type ::= INT
@@ -66,6 +75,7 @@ type ::= INT
         | SHORT
         | error {:parser.report_error("Invalid type", parser.scan());:};
 
+params ::= ID | NUM | CHAR;
 // int a,b = 1,2
 // TODO: throw error when id's do not match values ej: a,b = 1;
 varAsignation::= idChain ASSIGN asignationChain;
@@ -73,13 +83,20 @@ asignationChain::=  NUM COMMA asignationChain | NUM | error {:parser.report_erro
 
 funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE
                   | VOID ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE;
+
 paramChain::= type ID COMMA paramChain | type ID | ;
 
 funcImpl ::= varDeclaration funcImpl | statement funcImpl | statement | error {:parser.report_error("Function implementation error", parser.scan());:};
 
 // Statements can be expressions with semicolons
-statement ::= expression SEMICOLON | funcBody | if_statement | for_statement | while_statement | switch_statement | READ LPAREN RPAREN SEMICOLON | WRITE LPAREN expression RPAREN SEMICOLON | BREAK SEMICOLON | CONTINUE SEMICOLON;
+statement ::= expression SEMICOLON | funcBody | if_statement | for_statement | while_statement | switch_statement | BREAK SEMICOLON | CONTINUE SEMICOLON | write_statement | read_statement | function_call;
 statement_block ::= LBRACE funcImpl RBRACE;
+
+read_statement ::= READ LPAREN RPAREN SEMICOLON | READ LPAREN ID RPAREN SEMICOLON;
+
+write_statement ::= WRITE LPAREN expression RPAREN SEMICOLON;
+
+function_call ::= ID LPAREN params RPAREN;
 
 // Top-level expression that can be boolean or arithmetic
 expression ::= booleanExpression
@@ -117,10 +134,16 @@ booleanExpression ::= arithmeticExpression EQUALS arithmeticExpression
                     | NOT booleanExpression
                     | LPAREN booleanExpression RPAREN;
 
+case_blocks ::= case_blocks CASE NUM COLON statement
+              | case_blocks CASE error COLON statement {:parser.report_error("Error: 'case' debe ser una constante.", parser.scan());:}
+              | case_blocks DEFAULT COLON statement
+              | DEFAULT COLON statement
+              | error {:parser.report_error("Error en 'case' o 'default' en 'switch'.", parser.scan());:};
 
 // If - If_else Statements
 if_statement::= IF LPAREN expression RPAREN statement_block SEMICOLON
-            | IF LPAREN expression RPAREN statement_block ELSE statement_block SEMICOLON;
+                | IF LPAREN expression RPAREN statement_block ELSE statement_block SEMICOLON
+                | IF LPAREN expression RPAREN statement_block ELSE error {: parser.report_error("Error: Uso duplicado de 'else' en 'if'.", parser.scan()); :};
 
 // For Statements
 for_statement ::= FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN statement_block SEMICOLON;
@@ -130,4 +153,3 @@ while_statement ::= WHILE LPAREN expression RPAREN statement_block SEMICOLON;
 
 // Switch Statements
 switch_statement ::= SWITCH LPAREN NUM RPAREN LBRACE case_blocks RBRACE SEMICOLON;
-
