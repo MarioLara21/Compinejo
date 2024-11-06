@@ -136,15 +136,19 @@ import TokenTable.TokenInfo;
 
 
 /* Error handling */
-.               {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));}
+.               {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral), new TokenInfo(yytext(), getLine(), getCol()));}
     // Identifier errors
-([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier)); }
-[0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier));}
+([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@\$%]+)   { return new Symbol(err.errorMap.get(errors.InvalidIdentifier), new TokenInfo(yytext(), getLine(), getCol())); }
+[0-9]+[a-zA-Z]+ {return new Symbol(err.errorMap.get(errors.InvalidIdentifier), new TokenInfo(yytext(), getLine(), getCol()));}
 
     // String errors
 
-\.[0-9]+ {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} // Número decimal sin dígito antes del punto
-[0-9]+\.[^0-9] {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} // Número decimal sin dígito después del punto
-(("\.")([eE][-+]?[0-9]+)) {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} //Numeros cientificos que no tienen nada antes del punto decimal
-[0-9]*\.[0-9]+[eE][+-]?[0-9]* {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} //Parte científica incompleta
-\.[0-9]+[eE][+-]?[0-9]+ {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));} //Parte científica mal estructurada
+\.[0-9]+ {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral), new TokenInfo(yytext(), getLine(), getCol()));} // Número decimal sin dígito antes del punto
+[0-9]+\.[^0-9] {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral), new TokenInfo(yytext(), getLine(), getCol()));} // Número decimal sin dígito después del punto
+(("\.")([eE][-+]?[0-9]+)) {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral), new TokenInfo(yytext(), getLine(), getCol()));} //Numeros cientificos que no tienen nada antes del punto decimal
+[0-9]*\.[0-9]+[eE][+-]?[0-9]* {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral), new TokenInfo(yytext(), getLine(), getCol()));} //Parte científica incompleta
+\.[0-9]+[eE][+-]?[0-9]+ {return new Symbol(err.errorMap.get(errors.UnexpectedLiteral), new TokenInfo(yytext(), getLine(), getCol()));} //Parte científica mal estructurada
+<<EOF>> {
+  return new Symbol(sym.EOF, new TokenInfo("EOF",getLine(),getCol()));
+}
+

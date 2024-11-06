@@ -7,8 +7,15 @@ parser code {:
         if (info instanceof Symbol) {
             Symbol sym = (Symbol) info;
             TokenInfo tokenInf = (TokenInfo) sym.value;
-            System.err.printf("Syntax Error: %s at line %d, column %d%n",
-                    message, tokenInf.line, tokenInf.column);
+            if(!message.equals("Syntax error")){
+                System.err.printf("Syntax Error: %s near token %s at line %d, column %d%n",
+                        message, tokenInf.value, tokenInf.line, tokenInf.column);
+            }
+            else{
+                System.err.printf("Syntax Error: related with token %s at line %d, column %d%n",
+                        tokenInf.value, tokenInf.line, tokenInf.column);
+            }
+
         } else {
             System.err.println("Syntax Error: " + message);
         }
@@ -57,18 +64,18 @@ type ::= INT
         | CHAR
         | LONG
         | SHORT
-        | error {: System.out.println("Invalid type");:};
+        | error {:parser.report_error("Invalid type", parser.scan());:};
 
 // int a,b = 1,2
 // TODO: throw error when id's do not match values ej: a,b = 1;
 varAsignation::= idChain ASSIGN asignationChain;
-asignationChain::=  NUM COMMA asignationChain | NUM | error {:System.out.println("Variable assignation error");:};
+asignationChain::=  NUM COMMA asignationChain | NUM | error {:parser.report_error("Assignation error", parser.scan());:};
 
-funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON
-                  | VOID ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE SEMICOLON;
+funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE
+                  | VOID ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE;
 paramChain::= type ID COMMA paramChain | type ID | ;
 
-funcImpl ::= varDeclaration funcImpl | statement funcImpl | statement | error {:System.out.println("Function implementation error");:};
+funcImpl ::= varDeclaration funcImpl | statement funcImpl | statement | error {:parser.report_error("Function implementation error", parser.scan());:};
 
 // Statements can be expressions with semicolons
 statement ::= expression SEMICOLON | funcBody | if_statement | for_statement | while_statement | switch_statement | READ LPAREN RPAREN SEMICOLON | WRITE LPAREN expression RPAREN SEMICOLON | BREAK SEMICOLON | CONTINUE SEMICOLON;
@@ -77,7 +84,7 @@ statement_block ::= LBRACE funcImpl RBRACE;
 // Top-level expression that can be boolean or arithmetic
 expression ::= booleanExpression
              | arithmeticExpression
-             | error {:System.out.println("Invalid expression");:};
+             | error {:parser.report_error("Invalid expression", parser.scan());:};
 
 // Arithmetic expressions
 arithmeticExpression ::= arithmeticExpression PLUS arithmeticExpression

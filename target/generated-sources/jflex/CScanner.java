@@ -926,12 +926,14 @@ public class CScanner implements java_cup.runtime.Scanner {
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
             zzDoEOF();
-          { return new java_cup.runtime.Symbol(sym.EOF); }
+              {
+                return new Symbol(sym.EOF, new TokenInfo("EOF",getLine(),getCol()));
+              }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));
+            { return new Symbol(err.errorMap.get(errors.UnexpectedLiteral), new TokenInfo(yytext(), getLine(), getCol()));
             }
           // fall through
           case 88: break;
@@ -1095,7 +1097,7 @@ public class CScanner implements java_cup.runtime.Scanner {
           // fall through
           case 119: break;
           case 33:
-            { return new Symbol(err.errorMap.get(errors.InvalidIdentifier));
+            { return new Symbol(err.errorMap.get(errors.InvalidIdentifier), new TokenInfo(yytext(), getLine(), getCol()));
             }
           // fall through
           case 120: break;
