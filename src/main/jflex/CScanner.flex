@@ -52,6 +52,8 @@ import TokenTable.TokenInfo;
 "void"       { return new Symbol(sym.VOID, new TokenInfo(yytext(), getLine(), getCol())); }
 "volatile"   { return new Symbol(sym.VOLATILE, new TokenInfo(yytext(), getLine(), getCol())); }
 "while"      { return new Symbol(sym.WHILE, new TokenInfo(yytext(), getLine(), getCol())); }
+"read"       {return new Symbol(sym.READ, new TokenInfo(yytext(), getLine(), getCol()));}
+"write"      {return new Symbol(sym.WRITE, new TokenInfo(yytext(), getLine(), getCol()));}
 
 /* Operators */
 ","         { return new Symbol(sym.COMMA, new TokenInfo(yytext(), getLine(), getCol())); }
