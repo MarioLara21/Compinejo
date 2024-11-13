@@ -75,7 +75,7 @@ type ::= INT
         | SHORT
         | error {:parser.report_error("Invalid type", parser.scan());:};
 
-params ::= ID | NUM | CHAR;
+params ::= expression | CHAR;
 // int a,b = 1,2
 // TODO: throw error when id's do not match values ej: a,b = 1;
 varAsignation::= idChain ASSIGN asignationChain;
@@ -106,7 +106,7 @@ read_statement ::= READ LPAREN RPAREN SEMICOLON | READ LPAREN ID RPAREN SEMICOLO
 
 write_statement ::= WRITE LPAREN expression RPAREN SEMICOLON | WRITE LPAREN RPAREN SEMICOLON {:parser.report_error("Invalid parameters in write", parser.scan());:};
 
-function_call ::= ID LPAREN params RPAREN ;
+function_call ::= ID LPAREN params RPAREN | ID LPAREN RPAREN;
 
 // Top-level expression that can be boolean or arithmetic
 expression ::= booleanExpression
