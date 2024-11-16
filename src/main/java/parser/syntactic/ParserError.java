@@ -1,4 +1,4 @@
-package parser;
+package parser.syntactic;
 
 import java_cup.runtime.Symbol;
 
