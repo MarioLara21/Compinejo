@@ -2,7 +2,7 @@ package parser.semantic;
 
 import java.util.*;
 
-class SymbolTable {
+public class SymbolTable {
     private final Map<String, SemanticSymbol> table;
 
     public SymbolTable() {

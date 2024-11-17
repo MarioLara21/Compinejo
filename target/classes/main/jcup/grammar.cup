@@ -32,7 +32,7 @@ nonterminal funcImpl, funcHead;
 nonterminal arithmeticExpression, statement, booleanExpression, expression;
 nonterminal if_statement, for_statement, while_statement, switch_statement;
 nonterminal statement_block,case_blocks, case_block, default_block,read_statement,write_statement;
-nonterminal function_call,params,validVarDeclaration,varDeclarationError, else_block;
+nonterminal function_call,params, else_block;
 
 terminal COMMA, SEMICOLON, INCREMENT, DECREMENT, EQUALS, GREATEREQUAL, GREATER, QUESTION, LESSEQUAL, LESS, NOTEQUAL;
 terminal OROR, ANDAND, NOT, ASSIGN, PLUS, MINUS, TIMES, DIVIDE, MODULO, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE;
@@ -55,20 +55,12 @@ precedence right NOT;  // Highest precedence for NOT
 globalProg ::= varDeclaration globalProg| funcDeclaration globalProg | funcDeclaration;
 
 
-varDeclaration ::= validVarDeclaration
-                 | varDeclarationError;
-
-validVarDeclaration ::= CONST type idChain SEMICOLON
+varDeclaration ::= CONST type idChain SEMICOLON
                       | type idChain SEMICOLON
                       | CONST type varAsignation SEMICOLON
                       | type varAsignation SEMICOLON;
 
-//varDeclarationError ::= CONST type idChain {: parser.report_error("Error: Falta ; al final de la declaracion.", parser.scan()); :}
-//                      | type idChain {: parser.report_error("Error: Falta ';' al final de la declaracion.", parser.scan()); :}
-//                      | CONST type varAsignation {: parser.report_error("Error: Falta ';' al final de la declaracion.", parser.scan()); :}
-//                      | type varAsignation {: parser.report_error("Error: Falta ';' al final de la declaracion.", parser.scan()); :};
-
-idChain::= idChain COMMA ID | ID | error {::};
+idChain::= idChain COMMA ID | ID ;
 type ::= INT
         | CHAR
         | LONG
@@ -79,7 +71,7 @@ params ::= expression | CHAR;
 // int a,b = 1,2
 // TODO: throw error when id's do not match values ej: a,b = 1;
 varAsignation::= idChain ASSIGN asignationChain;
-asignationChain::=  NUM COMMA asignationChain | NUM | error {:parser.report_error("Assignation error", parser.scan());:};
+asignationChain::=  asignationChain COMMA expression | expression | error {:parser.report_error("Assignation error", parser.scan());:};
 
 funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE
                   | VOID ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE;
