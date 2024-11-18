@@ -5,6 +5,9 @@
 /IdeaProjects/Compinejo/src/main/java/parser/semantic/SemanticErrorManager.java
 /IdeaProjects/Compinejo/src/main/java/parser/semantic/SemanticSymbol.java
 /IdeaProjects/Compinejo/src/main/java/parser/semantic/SymbolTable.java
+/IdeaProjects/Compinejo/src/main/java/parser/semantic/registers/RSDataObject.java
+/IdeaProjects/Compinejo/src/main/java/parser/semantic/registers/RSType.java
+/IdeaProjects/Compinejo/src/main/java/parser/semantic/registers/SemanticRegister.java
 /IdeaProjects/Compinejo/src/main/java/parser/syntactic/ParserError.java
 /IdeaProjects/Compinejo/src/main/java/scanner/errors/err.java
 /IdeaProjects/Compinejo/src/main/java/scanner/errors/errors.java

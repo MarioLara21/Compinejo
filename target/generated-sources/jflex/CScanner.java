@@ -933,13 +933,13 @@ public class CScanner implements java_cup.runtime.Scanner {
         zzAtEOF = true;
             zzDoEOF();
               {
-                return new Symbol(sym.EOF, new TokenInfo("EOF",getLine(),getCol()));
+                return new Symbol(sym.EOF, getLine(), getCol(), yytext());
               }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { return new Symbol(err.errorMap.get(errors.UnexpectedLiteral), new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(err.errorMap.get(errors.UnexpectedLiteral), getLine(), getCol(), yytext());
             }
           // fall through
           case 90: break;
@@ -949,142 +949,142 @@ public class CScanner implements java_cup.runtime.Scanner {
           // fall through
           case 91: break;
           case 3:
-            { return new Symbol(sym.NOT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.NOT, getLine(), getCol(), yytext());
             }
           // fall through
           case 92: break;
           case 4:
-            { return new Symbol(sym.HASH, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.HASH, getLine(), getCol(), yytext());
             }
           // fall through
           case 93: break;
           case 5:
-            { return new Symbol(sym.MODULO, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.MODULO, getLine(), getCol(), yytext());
             }
           // fall through
           case 94: break;
           case 6:
-            { return new Symbol(sym.AND, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.AND, getLine(), getCol(), yytext());
             }
           // fall through
           case 95: break;
           case 7:
-            { return new Symbol(sym.LPAREN, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.LPAREN, getLine(), getCol(), yytext());
             }
           // fall through
           case 96: break;
           case 8:
-            { return new Symbol(sym.RPAREN, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.RPAREN, getLine(), getCol(), yytext());
             }
           // fall through
           case 97: break;
           case 9:
-            { return new Symbol(sym.TIMES, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.TIMES, getLine(), getCol(), yytext());
             }
           // fall through
           case 98: break;
           case 10:
-            { return new Symbol(sym.PLUS, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.PLUS, getLine(), getCol(), yytext());
             }
           // fall through
           case 99: break;
           case 11:
-            { return new Symbol(sym.COMMA, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.COMMA, getLine(), getCol(), yytext());
             }
           // fall through
           case 100: break;
           case 12:
-            { return new Symbol(sym.MINUS, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.MINUS, getLine(), getCol(), yytext());
             }
           // fall through
           case 101: break;
           case 13:
-            { return new Symbol(sym.DOT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.DOT, getLine(), getCol(), yytext());
             }
           // fall through
           case 102: break;
           case 14:
-            { return new Symbol(sym.DIVIDE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.DIVIDE, getLine(), getCol(), yytext());
             }
           // fall through
           case 103: break;
           case 15:
-            { return new Symbol(sym.NUM, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.NUM, getLine(), getCol(), yytext());
             }
           // fall through
           case 104: break;
           case 16:
-            { return new Symbol(sym.COLON, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.COLON, getLine(), getCol(), yytext());
             }
           // fall through
           case 105: break;
           case 17:
-            { return new Symbol(sym.SEMICOLON, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.SEMICOLON, getLine(), getCol(), yytext());
             }
           // fall through
           case 106: break;
           case 18:
-            { return new Symbol(sym.LESS, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.LESS, getLine(), getCol(), yytext());
             }
           // fall through
           case 107: break;
           case 19:
-            { return new Symbol(sym.ASSIGN, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.ASSIGN, getLine(), getCol(), yytext());
             }
           // fall through
           case 108: break;
           case 20:
-            { return new Symbol(sym.GREATER, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.GREATER, getLine(), getCol(), yytext());
             }
           // fall through
           case 109: break;
           case 21:
-            { return new Symbol(sym.QUESTION, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.QUESTION, getLine(), getCol(), yytext());
             }
           // fall through
           case 110: break;
           case 22:
-            { return new Symbol(sym.ID, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.ID, getLine(), getCol(), yytext());
             }
           // fall through
           case 111: break;
           case 23:
-            { return new Symbol(sym.LBRACKET, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.LBRACKET, getLine(), getCol(), yytext());
             }
           // fall through
           case 112: break;
           case 24:
-            { return new Symbol(sym.RBRACKET, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.RBRACKET, getLine(), getCol(), yytext());
             }
           // fall through
           case 113: break;
           case 25:
-            { return new Symbol(sym.XOR, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.XOR, getLine(), getCol(), yytext());
             }
           // fall through
           case 114: break;
           case 26:
-            { return new Symbol(sym.LBRACE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.LBRACE, getLine(), getCol(), yytext());
             }
           // fall through
           case 115: break;
           case 27:
-            { return new Symbol(sym.OR, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.OR, getLine(), getCol(), yytext());
             }
           // fall through
           case 116: break;
           case 28:
-            { return new Symbol(sym.RBRACE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.RBRACE, getLine(), getCol(), yytext());
             }
           // fall through
           case 117: break;
           case 29:
-            { return new Symbol(sym.TILDE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.TILDE, getLine(), getCol(), yytext());
             }
           // fall through
           case 118: break;
           case 30:
-            { return new Symbol(sym.NOTEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.NOTEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 119: break;
@@ -1093,62 +1093,62 @@ public class CScanner implements java_cup.runtime.Scanner {
           if(str.contains("\n")){
               return new Symbol(err.errorMap.get(errors.UnexpectedLiteral));
           }
-          return new Symbol(sym.STRING, new TokenInfo(yytext(), getLine(), getCol()));
+          return new Symbol(sym.STRING, getLine(), getCol(), yytext());
             }
           // fall through
           case 120: break;
           case 32:
-            { return new Symbol(sym.STRING, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.STRING, getLine(), getCol(), yytext());
             }
           // fall through
           case 121: break;
           case 33:
-            { return new Symbol(err.errorMap.get(errors.InvalidIdentifier), new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(err.errorMap.get(errors.InvalidIdentifier), getLine(), getCol(), yytext());
             }
           // fall through
           case 122: break;
           case 34:
-            { return new Symbol(sym.MODULOEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.MODULOEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 123: break;
           case 35:
-            { return new Symbol(sym.ANDAND, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.ANDAND, getLine(), getCol(), yytext());
             }
           // fall through
           case 124: break;
           case 36:
-            { return new Symbol(sym.ANDEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.ANDEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 125: break;
           case 37:
-            { return new Symbol(sym.TIMESEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.TIMESEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 126: break;
           case 38:
-            { return new Symbol(sym.INCREMENT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.INCREMENT, getLine(), getCol(), yytext());
             }
           // fall through
           case 127: break;
           case 39:
-            { return new Symbol(sym.PLUSEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.PLUSEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 128: break;
           case 40:
-            { return new Symbol(sym.DECREMENT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.DECREMENT, getLine(), getCol(), yytext());
             }
           // fall through
           case 129: break;
           case 41:
-            { return new Symbol(sym.MINUSEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.MINUSEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 130: break;
           case 42:
-            { return new Symbol(sym.ARROW, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.ARROW, getLine(), getCol(), yytext());
             }
           // fall through
           case 131: break;
@@ -1158,77 +1158,77 @@ public class CScanner implements java_cup.runtime.Scanner {
           // fall through
           case 132: break;
           case 44:
-            { return new Symbol(sym.DIVIDEEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.DIVIDEEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 133: break;
           case 45:
-            { return new Symbol(sym.LSHIFT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.LSHIFT, getLine(), getCol(), yytext());
             }
           // fall through
           case 134: break;
           case 46:
-            { return new Symbol(sym.LESSEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.LESSEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 135: break;
           case 47:
-            { return new Symbol(sym.EQUALS, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.EQUALS, getLine(), getCol(), yytext());
             }
           // fall through
           case 136: break;
           case 48:
-            { return new Symbol(sym.GREATEREQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.GREATEREQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 137: break;
           case 49:
-            { return new Symbol(sym.RSHIFT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.RSHIFT, getLine(), getCol(), yytext());
             }
           // fall through
           case 138: break;
           case 50:
-            { return new Symbol(sym.XOREQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.XOREQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 139: break;
           case 51:
-            { return new Symbol(sym.DO, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.DO, getLine(), getCol(), yytext());
             }
           // fall through
           case 140: break;
           case 52:
-            { return new Symbol(sym.IF, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.IF, getLine(), getCol(), yytext());
             }
           // fall through
           case 141: break;
           case 53:
-            { return new Symbol(sym.OREQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.OREQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 142: break;
           case 54:
-            { return new Symbol(sym.OROR, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.OROR, getLine(), getCol(), yytext());
             }
           // fall through
           case 143: break;
           case 55:
-            { return new Symbol(sym.LSHIFTEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.LSHIFTEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 144: break;
           case 56:
-            { return new Symbol(sym.RSHIFTEQUAL, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.RSHIFTEQUAL, getLine(), getCol(), yytext());
             }
           // fall through
           case 145: break;
           case 57:
-            { return new Symbol(sym.FOR, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.FOR, getLine(), getCol(), yytext());
             }
           // fall through
           case 146: break;
           case 58:
-            { return new Symbol(sym.INT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.INT, getLine(), getCol(), yytext());
             }
           // fall through
           case 147: break;
@@ -1238,152 +1238,152 @@ public class CScanner implements java_cup.runtime.Scanner {
           // fall through
           case 148: break;
           case 60:
-            { return new Symbol(sym.AUTO, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.AUTO, getLine(), getCol(), yytext());
             }
           // fall through
           case 149: break;
           case 61:
-            { return new Symbol(sym.CASE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.CASE, getLine(), getCol(), yytext());
             }
           // fall through
           case 150: break;
           case 62:
-            { return new Symbol(sym.CHAR, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.CHAR, getLine(), getCol(), yytext());
             }
           // fall through
           case 151: break;
           case 63:
-            { return new Symbol(sym.ELSE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.ELSE, getLine(), getCol(), yytext());
             }
           // fall through
           case 152: break;
           case 64:
-            { return new Symbol(sym.ENUM, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.ENUM, getLine(), getCol(), yytext());
             }
           // fall through
           case 153: break;
           case 65:
-            { return new Symbol(sym.GOTO, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.GOTO, getLine(), getCol(), yytext());
             }
           // fall through
           case 154: break;
           case 66:
-            { return new Symbol(sym.LONG, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.LONG, getLine(), getCol(), yytext());
             }
           // fall through
           case 155: break;
           case 67:
-            { return new Symbol(sym.READ, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.READ, getLine(), getCol(), yytext());
             }
           // fall through
           case 156: break;
           case 68:
-            { return new Symbol(sym.VOID, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.VOID, getLine(), getCol(), yytext());
             }
           // fall through
           case 157: break;
           case 69:
-            { return new Symbol(sym.BREAK, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.BREAK, getLine(), getCol(), yytext());
             }
           // fall through
           case 158: break;
           case 70:
-            { return new Symbol(sym.CONST, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.CONST, getLine(), getCol(), yytext());
             }
           // fall through
           case 159: break;
           case 71:
-            { return new Symbol(sym.FLOAT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.FLOAT, getLine(), getCol(), yytext());
             }
           // fall through
           case 160: break;
           case 72:
-            { return new Symbol(sym.SHORT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.SHORT, getLine(), getCol(), yytext());
             }
           // fall through
           case 161: break;
           case 73:
-            { return new Symbol(sym.UNION, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.UNION, getLine(), getCol(), yytext());
             }
           // fall through
           case 162: break;
           case 74:
-            { return new Symbol(sym.WHILE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.WHILE, getLine(), getCol(), yytext());
             }
           // fall through
           case 163: break;
           case 75:
-            { return new Symbol(sym.WRITE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.WRITE, getLine(), getCol(), yytext());
             }
           // fall through
           case 164: break;
           case 76:
-            { return new Symbol(sym.DOUBLE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.DOUBLE, getLine(), getCol(), yytext());
             }
           // fall through
           case 165: break;
           case 77:
-            { return new Symbol(sym.EXTERN, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.EXTERN, getLine(), getCol(), yytext());
             }
           // fall through
           case 166: break;
           case 78:
-            { return new Symbol(sym.RETURN, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.RETURN, getLine(), getCol(), yytext());
             }
           // fall through
           case 167: break;
           case 79:
-            { return new Symbol(sym.SIGNED, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.SIGNED, getLine(), getCol(), yytext());
             }
           // fall through
           case 168: break;
           case 80:
-            { return new Symbol(sym.SIZEOF, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.SIZEOF, getLine(), getCol(), yytext());
             }
           // fall through
           case 169: break;
           case 81:
-            { return new Symbol(sym.STATIC, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.STATIC, getLine(), getCol(), yytext());
             }
           // fall through
           case 170: break;
           case 82:
-            { return new Symbol(sym.STRUCT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.STRUCT, getLine(), getCol(), yytext());
             }
           // fall through
           case 171: break;
           case 83:
-            { return new Symbol(sym.SWITCH, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.SWITCH, getLine(), getCol(), yytext());
             }
           // fall through
           case 172: break;
           case 84:
-            { return new Symbol(sym.DEFAULT, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.DEFAULT, getLine(), getCol(), yytext());
             }
           // fall through
           case 173: break;
           case 85:
-            { return new Symbol(sym.TYPEDEF, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.TYPEDEF, getLine(), getCol(), yytext());
             }
           // fall through
           case 174: break;
           case 86:
-            { return new Symbol(sym.CONTINUE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.CONTINUE, getLine(), getCol(), yytext());
             }
           // fall through
           case 175: break;
           case 87:
-            { return new Symbol(sym.REGISTER, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.REGISTER, getLine(), getCol(), yytext());
             }
           // fall through
           case 176: break;
           case 88:
-            { return new Symbol(sym.UNSIGNED, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.UNSIGNED, getLine(), getCol(), yytext());
             }
           // fall through
           case 177: break;
           case 89:
-            { return new Symbol(sym.VOLATILE, new TokenInfo(yytext(), getLine(), getCol()));
+            { return new Symbol(sym.VOLATILE, getLine(), getCol(), yytext());
             }
           // fall through
           case 178: break;

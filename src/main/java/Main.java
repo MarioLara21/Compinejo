@@ -66,7 +66,7 @@ public class Main {
 //            System.out.println("Valid Tokens: ======================================");
             errors.printTable();
 
-            Object result = parser.parse().value;
+            Object result = parser.parse();
 
 //            System.out.println("Errors: ======================================");
 //            errors.printTable();

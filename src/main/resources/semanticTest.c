@@ -1,3 +1,5 @@
+const short a;
+
 
 int func1(){
 

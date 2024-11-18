@@ -1,6 +1,7 @@
 import java_cup.runtime.Symbol;
 import java_cup.lexer;
 import TokenTable.TokenInfo;
+import java.util.*;
 
 parser code {:
     public void report_error(String message, Object info) {
@@ -55,15 +56,19 @@ precedence right NOT;  // Highest precedence for NOT
 globalProg ::= varDeclaration globalProg| funcDeclaration globalProg | funcDeclaration;
 
 
-varDeclaration ::= CONST type idChain SEMICOLON
+varDeclaration ::= CONST type:val1 idChain:val2 SEMICOLON {:
+    for(String id: (List<String>)val2){
+        System.out.println("const " + val1 + " " + id +";");
+    }
+:}
                       | type idChain SEMICOLON
                       | CONST type varAsignation SEMICOLON
                       | type varAsignation SEMICOLON;
 
-type ::= INT
-        | CHAR
-        | LONG
-        | SHORT
+type ::= INT:type {:RESULT = (String)type; :}
+        | CHAR:type {:RESULT = (String)type; :}
+        | LONG:type {:RESULT = (String)type; :}
+        | SHORT:type {:RESULT = (String)type; :}
         | error {:parser.report_error("Invalid type", parser.scan());:};
 
 params ::= expression | CHAR;
@@ -71,8 +76,19 @@ params ::= expression | CHAR;
 // TODO: throw error when id's do not match values ej: a,b = 1;
 varAsignation::= idChain ASSIGN asignationChain;
 
-idChain::= idChain COMMA ID | ID ;
-
+idChain ::= idChain:chain COMMA ID:id
+             {:
+                // Use chain's result and add the new ID
+                ((List<String>)chain).add((String) id);
+                RESULT = chain;
+             :}
+          | ID:id
+             {:
+                // Create a new list with a single ID
+                List<String> ids = new ArrayList<>();
+                ids.add((String) id);
+                RESULT = ids;
+             :};
 asignationChain::=  asignationChain COMMA expression
                     | expression
                     | error {:parser.report_error("Assignation error", parser.scan());:};

@@ -1,4 +1,5 @@
-int b = a+2, a;
+const short a;
+
 
 int func1(){
 
