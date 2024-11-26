@@ -1,4 +1,4 @@
-package parser.semantic;
+package parsing.semantic;
 
 public class SemanticErrorManager {
 

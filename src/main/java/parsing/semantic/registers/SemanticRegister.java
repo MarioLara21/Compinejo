@@ -1,4 +1,4 @@
-package parser.semantic.registers;
+package parsing.semantic.registers;
 
 public class SemanticRegister {
 

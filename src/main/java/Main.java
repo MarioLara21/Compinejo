@@ -24,7 +24,7 @@ public class Main {
             FileReader parseReader = new FileReader(path);
             CScanner scanner = new CScanner(reader);
 
-            CParser parser = new CParser(new CScanner(parseReader));
+//            CParser parser = new CParser(new CScanner(parseReader));
 
 
             Symbol token;
@@ -66,7 +66,7 @@ public class Main {
 //            System.out.println("Valid Tokens: ======================================");
             errors.printTable();
 
-            Object result = parser.parse();
+//            Object result = parser.parse();
 
 //            System.out.println("Errors: ======================================");
 //            errors.printTable();

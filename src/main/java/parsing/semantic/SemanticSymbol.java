@@ -1,4 +1,4 @@
-package parser.semantic;
+package parsing.semantic;
 
 public class SemanticSymbol {
     private String name;        // Name of the symbol (identifier)
@@ -33,7 +33,7 @@ public class SemanticSymbol {
         this.type = type;
     }
 
-    public boolean isConstant() {
+    public boolean isConst() {
         return isConstant;
     }
 

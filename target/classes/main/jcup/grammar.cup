@@ -2,19 +2,21 @@ import java_cup.runtime.Symbol;
 import java_cup.lexer;
 import TokenTable.TokenInfo;
 import java.util.*;
+import parsing.semantic.SymbolTable;
+import parsing.semantic.SemanticSymbol;
+import helpers.Help;
 
 parser code {:
     public void report_error(String message, Object info) {
         if (info instanceof Symbol) {
             Symbol sym = (Symbol) info;
-            TokenInfo tokenInf = (TokenInfo) sym.value;
             if(!message.equals("Syntax error")){
                 System.err.printf("Syntax Error: %s near token %s at line %d, column %d%n",
-                        message, tokenInf.value, tokenInf.line, tokenInf.column);
+                        message, sym.value, sym.left, sym.right);
             }
             else{
                 System.err.printf("Syntax Error: related with token %s at line %d, column %d%n",
-                        tokenInf.value, tokenInf.line, tokenInf.column);
+                        sym.value, sym.left, sym.right);
             }
 
         } else {
@@ -27,6 +29,13 @@ parser code {:
         throw new RuntimeException("Fatal error: Unable to continue parsing.");
     }
 :};
+
+action code {:
+
+    private static SymbolTable table = new SymbolTable();
+    private static int actualScope = 0; // on function declaration increse the scope
+
+:}
 
 nonterminal varDeclaration, type, idChain, funcDeclaration, globalProg, varAsignation, asignationChain, paramChain;
 nonterminal funcImpl, funcHead;
@@ -57,13 +66,117 @@ globalProg ::= varDeclaration globalProg| funcDeclaration globalProg | funcDecla
 
 
 varDeclaration ::= CONST type:val1 idChain:val2 SEMICOLON {:
-    for(String id: (List<String>)val2){
-        System.out.println("const " + val1 + " " + id +";");
+                        for(String id: (List<String>)val2){
+                            String symName = ((String)val1);
+                            SemanticSymbol symbol = new SemanticSymbol(
+                                    id,
+                                    symName,
+                                    true,
+                                    null,
+                                    actualScope
+                            );
+                            if(table.contains(symName)){
+                                System.err.println("Semantic error: Symbol " + symName + "already exists" );
+                            }
+                            else{
+                                table.addSymbol(symbol);
+                            }
+                        }
+                      :}
+                      | type:val1 idChain:val2 SEMICOLON{:
+                        for(String id: (List<String>)val2){
+                            String symName = ((String)val1);
+                            SemanticSymbol symbol = new SemanticSymbol(
+                                    id,
+                                    symName,
+                                    false,
+                                    null,
+                                    actualScope
+                            );
+                            if(table.contains(symName)){
+                                System.err.println("Semantic error: Symbol " + symName + "already exists" );
+                            }
+                            else{
+                                table.addSymbol(symbol);
+                            }
+                        }
+                    :}
+                      | CONST type:val1 varAsignation:idValues SEMICOLON{:
+
+List<String> ids = ((List<List<String>>) idValues).get(0);
+List<String> values = ((List<List<String>>) idValues).get(1);
+int idLength = ids.size();
+int valueLength = values.size();
+SemanticSymbol newSymbol;
+String type = (String) val1;
+
+for (int i = 0; i < idLength; i++) {
+    if (Help.isNumber((String) values.get(i))) {
+        newSymbol = new SemanticSymbol(
+                (String) ids.get(i),
+                (String) val1,
+                true,
+                Help.parseType(type, (String) values.get(i)),
+                actualScope
+        );
+    } else {
+        // could be removed with constant propagation(?
+        SemanticSymbol querySym = table.getSymbol((String) values.get(i));
+        newSymbol = new SemanticSymbol(
+                (String) ids.get(i),
+                (String) val1,
+                true,
+                querySym.getValue(),
+                actualScope
+        );
     }
-:}
-                      | type idChain SEMICOLON
-                      | CONST type varAsignation SEMICOLON
-                      | type varAsignation SEMICOLON;
+
+    if (table.contains((String) val1)) {
+        System.err.println("Semantic error: Symbol " + val1 + " already exists");
+    } else {
+        table.addSymbol(newSymbol);
+    }
+}
+
+                      :}
+                      | type:val1 varAsignation:idValues SEMICOLON {:
+List<String> ids = ((List<List<String>>) idValues).get(0);
+List<String> values = ((List<List<String>>) idValues).get(1);
+int idLength = ids.size();
+int valueLength = values.size();
+SemanticSymbol newSymbol;
+String type = (String) val1;
+
+for (int i = 0; i < idLength; i++) {
+    if (Help.isNumber((String) values.get(i))) {
+        newSymbol = new SemanticSymbol(
+                (String) ids.get(i),
+                (String) val1,
+                false,
+                Help.parseType(type, (String) values.get(i)),
+                actualScope
+        );
+    } else {
+        // could be removed with constant propagation(?)
+        SemanticSymbol querySym = table.getSymbol((String) values.get(i));
+        newSymbol = new SemanticSymbol(
+                (String) ids.get(i),
+                (String) val1,
+                false,
+                querySym.getValue(),
+                actualScope
+        );
+    }
+
+    if (table.contains((String) val1)) {
+        System.err.println("Semantic error: Symbol " + val1 + " already exists");
+    } else {
+        table.addSymbol(newSymbol);
+    }
+}
+                      :};
+
+
 
 type ::= INT:type {:RESULT = (String)type; :}
         | CHAR:type {:RESULT = (String)type; :}
@@ -74,7 +187,23 @@ type ::= INT:type {:RESULT = (String)type; :}
 params ::= expression | CHAR;
 // int a,b = 1,2
 // TODO: throw error when id's do not match values ej: a,b = 1;
-varAsignation::= idChain ASSIGN asignationChain;
+varAsignation::= idChain:ids ASSIGN asignationChain:values {:
+        int idLength = ((List<String>)ids).size();
+        int valueLength = ((List<String>)values).size();
+        if(idLength > valueLength){
+            System.err.println("Semantic error: Too few values for the given IDs");
+        }
+        if(idLength < valueLength){
+            System.err.println("Semantic error: Too many values for the given IDs");
+        }
+        if (idLength == valueLength){
+        List<List<String>> idsValues = new ArrayList<>();
+        idsValues.add((List<String>)ids);
+        idsValues.add((List<String>)values);
+         RESULT = idsValues;
+        }
+
+:};
 
 idChain ::= idChain:chain COMMA ID:id
              {:
@@ -89,8 +218,21 @@ idChain ::= idChain:chain COMMA ID:id
                 ids.add((String) id);
                 RESULT = ids;
              :};
-asignationChain::=  asignationChain COMMA expression
-                    | expression
+
+
+asignationChain::=  asignationChain:chain COMMA expression:exp
+                    {:
+                        // Use chain's result and add the new expression
+                        ((List<String>)chain).add((String) exp);
+                        RESULT = chain;
+                    :}
+                    | expression:exp
+                    {:
+                        // Create a new list with a single expression
+                        List<String> expressions = new ArrayList<>();
+                        expressions.add((String) exp);
+                        RESULT = expressions;
+                    :}
                     | error {:parser.report_error("Assignation error", parser.scan());:};
 
 funcDeclaration ::= type ID LPAREN paramChain RPAREN LBRACE funcImpl RBRACE
@@ -121,27 +263,154 @@ write_statement ::= WRITE LPAREN expression RPAREN SEMICOLON | WRITE LPAREN RPAR
 function_call ::= ID LPAREN params RPAREN | ID LPAREN RPAREN;
 
 // Top-level expression that can be boolean or arithmetic
-expression ::= booleanExpression
-             | arithmeticExpression;
+expression ::= booleanExpression:exp
+             {:
+                RESULT = exp;
+                :}
+             | arithmeticExpression:exp
+             {:
+                RESULT = exp;
+                :};
 
 // Arithmetic expressions
-arithmeticExpression ::= arithmeticExpression PLUS arithmeticExpression
-                       | arithmeticExpression MINUS arithmeticExpression
-                       | arithmeticExpression TIMES arithmeticExpression
-                       | arithmeticExpression DIVIDE arithmeticExpression
-                       | arithmeticExpression MODULO arithmeticExpression
-                       | arithmeticExpression ASSIGN arithmeticExpression
-                       | arithmeticExpression PLUSEQUAL arithmeticExpression
-                       | arithmeticExpression MINUSEQUAL arithmeticExpression
-                       | arithmeticExpression TIMESEQUAL arithmeticExpression
-                       | arithmeticExpression DIVIDEEQUAL arithmeticExpression
-                       | ID INCREMENT
-                       | ID DECREMENT
-                       | INCREMENT ID
-                       | DECREMENT ID
-                       | NUM
-                       | ID
-                       | function_call
+arithmeticExpression ::= arithmeticExpression:e1 PLUS arithmeticExpression:e2
+                       {:
+                            RESULT = e1 + " + " + e2;
+                       :}
+                       | arithmeticExpression:e1 MINUS arithmeticExpression:e2
+                       {:
+                            RESULT = e1 + " - " + e2;
+                       :}
+                       | arithmeticExpression:e1 TIMES arithmeticExpression:e2
+                       {:
+                            RESULT = e1 + " * " + e2;
+                       :}
+                       | arithmeticExpression:e1 DIVIDE arithmeticExpression:e2
+                       {: RESULT = e1 + " / " + e2;:}
+                       | arithmeticExpression:e1 MODULO arithmeticExpression:e2
+                       {:
+                            RESULT = e1 + " % " + e2;
+                       :}
+                       | arithmeticExpression:e1 PLUSEQUAL arithmeticExpression:e2
+                       {:
+                            RESULT = e1 + " += " + e2;
+                       :}
+                       | arithmeticExpression:e1 MINUSEQUAL arithmeticExpression:e2
+                       {:
+                            RESULT = e1 + " -= " + e2;
+                       :}
+                       | arithmeticExpression:e1 TIMESEQUAL arithmeticExpression:e2
+                       {:
+                            RESULT = e1 + " *= " + e2;
+                       :}
+                       | arithmeticExpression:e1 DIVIDEEQUAL arithmeticExpression:e2
+                       {:
+                            RESULT = e1 + " /= " + e2;
+                       :}
+                       | ID:id INCREMENT
+                       {:
+                            SemanticSymbol queriedSym = table.getSymbol((String) id);
+                            table.printTable();
+                            if (queriedSym == null) {
+                                System.err.println("Semantic error: Variable '" + id + "' not declared");
+                            } else {
+                                if (table.validateNumberSymbolUpdate(queriedSym.getName())) {
+                                    switch ((String)queriedSym.getType()) {
+                                        case "int":
+                                            queriedSym.setValue((int) queriedSym.getValue()+1);
+                                            break;
+                                        case "long":
+                                            queriedSym.setValue((long) queriedSym.getValue() +1);
+                                            break;
+                                        case "short":
+                                            queriedSym.setValue((short) queriedSym.getValue()+1);
+                                            break;
+                                    }
+                                }
+                            }
+                            table.printTable();
+                       :}
+                       | ID:id DECREMENT
+                       {:
+                            SemanticSymbol queriedSym = table.getSymbol((String) id);
+                            table.printTable();
+                            if (queriedSym == null) {
+                                System.err.println("Semantic error: Variable '" + id + "' not declared");
+                            } else {
+                                if (table.validateNumberSymbolUpdate(queriedSym.getName())) {
+                                    switch ((String)queriedSym.getType()) {
+                                        case "int":
+                                            queriedSym.setValue((int) queriedSym.getValue()-1);
+                                            break;
+                                        case "long":
+                                            queriedSym.setValue((long) queriedSym.getValue()-1);
+                                            break;
+                                        case "short":
+                                            queriedSym.setValue((short) queriedSym.getValue()-1);
+                                            break;
+                                    }
+                                }
+                            }
+                            table.printTable();
+                       :}
+                       | INCREMENT ID:id
+                       {:
+                            SemanticSymbol queriedSym = table.getSymbol((String) id);
+                            table.printTable();
+                            if (queriedSym == null) {
+                                System.err.println("Semantic error: Variable '" + id + "' not declared");
+                            } else {
+                                if (table.validateNumberSymbolUpdate(queriedSym.getName())) {
+                                    switch ((String)queriedSym.getType()) {
+                                        case "int":
+                                            queriedSym.setValue((int) queriedSym.getValue()+1);
+                                            break;
+                                        case "long":
+                                            queriedSym.setValue((long) queriedSym.getValue()+1);
+                                            break;
+                                        case "short":
+                                            queriedSym.setValue((short) queriedSym.getValue()+1);
+                                            break;
+                                    }
+                                }
+                            }
+                            table.printTable();
+                       :}
+                       | DECREMENT ID:id
+                       {:
+                            SemanticSymbol queriedSym = table.getSymbol((String) id);
+                            table.printTable();
+                            if (queriedSym == null) {
+                                System.err.println("Semantic error: Variable '" + id + "' not declared");
+                            } else {
+                                if (table.validateNumberSymbolUpdate(queriedSym.getName())) {
+                                     switch ((String)queriedSym.getType()) {
+                                        case "int":
+                                            queriedSym.setValue((int)queriedSym.getValue()-1);
+                                            break;
+                                        case "long":
+                                            queriedSym.setValue((long) queriedSym.getValue()-1);
+                                            break;
+                                        case "short":
+                                            queriedSym.setValue((short) queriedSym.getValue()-1);
+                                            break;
+                                    }
+                                }
+                            }
+                            table.printTable();
+                       :}
+                       | NUM:num
+                       {:RESULT = (String)num; :}
+                       | ID:id
+                       {:
+                            SemanticSymbol queriedSym = table.getSymbol((String) id);
+                            if (queriedSym == null) {
+                                System.err.println("Semantic error: Variable '" + id + "' not declared");
+                            } else {
+                                RESULT = queriedSym.getValue();
+                            }
+                       :}
+                       | function_call:value
                        | LPAREN arithmeticExpression RPAREN;
 
 // Boolean expressions
