@@ -1,6 +1,5 @@
 int c;
-short a,b = 2,4;
-
+short a,b = "a",4;
 int func1(){
 ++a;
 write(2);

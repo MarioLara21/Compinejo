@@ -89,5 +89,7 @@ public class sym {
     public static final int VOLATILE = 79;  // "volatile"
     public static final int WHILE = 80;     // "while"
     public static final int STRING = 81;    // "string"
+    public static final int WRITE = 82;
+    public static final int READ = 83;
 
 }

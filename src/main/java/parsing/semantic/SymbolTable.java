@@ -3,7 +3,7 @@ package parsing.semantic;
 import java.util.*;
 
 public class SymbolTable {
-    private final Map<String, SemanticSymbol> table;
+    private static Map<String, SemanticSymbol> table;
 
     public SymbolTable() {
         this.table = new HashMap<>();
@@ -52,7 +52,7 @@ public class SymbolTable {
     }
 
     // Get all symbols in the table
-    public Collection<SemanticSymbol> getAllSymbols() {
+    public static Collection<SemanticSymbol> getAllSymbols() {
         return table.values();
     }
 
@@ -62,5 +62,9 @@ public class SymbolTable {
             sb.append(sym.toString()).append("\n");
         }
         System.out.println(sb.toString());
+    }
+
+    public boolean isDefined(String name) {
+        return table.containsKey(name);
     }
 }

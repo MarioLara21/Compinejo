@@ -7,6 +7,7 @@ import parsing.semantic.SemanticSymbol;
 import helpers.Help;
 
 parser code {:
+
     public void report_error(String message, Object info) {
         if (info instanceof Symbol) {
             Symbol sym = (Symbol) info;
@@ -62,8 +63,32 @@ precedence left TIMES, DIVIDE, MODULO;
 precedence right INCREMENT, DECREMENT;
 precedence right NOT;  // Highest precedence for NOT
 
-globalProg ::= varDeclaration globalProg| funcDeclaration globalProg | funcDeclaration;
 
+//+++++++++++++++++++++++++++++++++++++++++ IMPORTANTE +++++++++++++++++++++++++++++++++++++++++++++
+/*
+cuando se quiere recuperar el valor de un no terminal se hace de la siguiente manera:
+S:var
+donde var contiene el valor que se quiere recuperar
+dentro de la produccion S se tiene que devolver algun valor en RESULT para que var tenga un valor
+ej:
+S::= A:B {:
+    RESULT = (String)B;
+:}
+A::= ID:id {:
+    RESULT = (String)id;
+:}
+
+** SIEMPRE HAY QUE CASTEAR **
+
+Para la tabla de simbolos ver la clase Symbol  : Table.java y SemanticSymbol.java
+para los registros semanticos ver el paquete   : parsing.semantic.registers
+algunas funciones de ayuda estan en el paquete : helpers
+
+*/
+//+++++++++++++++++++++++++++++++++++++++++ IMPORTANTE +++++++++++++++++++++++++++++++++++++++++++++
+
+
+globalProg ::= varDeclaration globalProg| funcDeclaration globalProg | funcDeclaration;
 
 varDeclaration ::= CONST type:val1 idChain:val2 SEMICOLON {:
                         for(String id: (List<String>)val2){
